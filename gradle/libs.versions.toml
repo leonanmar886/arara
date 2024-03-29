@@ -1,0 +1,11 @@
+[versions]
+agp = "8.3.0"
+androidx-macro-benchmark = "1.2.2"
+my-library = "1.4"
+
+[libraries]
+androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidx-macro-benchmark" }
+my-library = { group = "com.myapplication", name = "mylibrary", version.ref = "my-library" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
