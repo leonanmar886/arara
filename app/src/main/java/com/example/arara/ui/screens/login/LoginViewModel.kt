@@ -38,7 +38,7 @@ class LoginViewModel: ViewModel() {
     }
   }
   
-  private fun login() {
+  fun login() {
     auth.signInWithEmailAndPassword(_uiState.value.email, _uiState.value.password)
       .addOnCompleteListener { task ->
         if (task.isSuccessful) {
