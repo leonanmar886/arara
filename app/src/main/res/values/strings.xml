@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">arara</string>
+    <string name="app_name">Arara</string>
+    <string name="login_title">Login</string>
 </resources>
