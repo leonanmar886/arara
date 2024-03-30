@@ -1,50 +1,73 @@
 package com.example.arara.ui.screens.login
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
-data class LoginState(
+data class ErrorMessages(
+  val email: String = "",
+  val password: String = "",
+  val general: String = ""
+)
+
+data class LoginDetails(
   val email: String = "",
   val password: String = "",
   val isLoading: Boolean = false,
   val isLoggedId: Boolean = false,
-  val errorMessage: String = ""
+  val errorMessages: ErrorMessages = ErrorMessages()
 )
+
+data class LoginState(
+  val loginDetails: LoginDetails = LoginDetails(),
+  val isLoginValid: Boolean = false
+)
+
 class LoginViewModel: ViewModel() {
-  private val _uiState = MutableStateFlow(LoginState())
   private lateinit var auth: FirebaseAuth
+  var loginUiState by mutableStateOf(LoginState())
+    private set
   
-  val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
-  
-  fun onPasswordChanged(password: String) {
-    _uiState.value = _uiState.value.copy(password = password)
+  fun updateUiState(loginDetails: LoginDetails) {
+    loginUiState = LoginState(loginDetails = loginDetails, isLoginValid = validateInput(loginDetails))
   }
   
-  fun onEmailChanged(email: String) {
-    if (isValidEmail(email)) {
-      _uiState.value = _uiState.value.copy(email = email)
-    } else {
-      _uiState.value = _uiState.value.copy(errorMessage = "Invalid email format")
+  private fun validateInput(uiState: LoginDetails): Boolean {
+    fun updateLoginState(field: (ErrorMessages) -> ErrorMessages): Boolean {
+      val newErrorMessages = field(uiState.errorMessages.copy())
+      val newLoginDetails = uiState.copy(errorMessages = newErrorMessages)
+      loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+      return false
     }
+    
+    if (!isValidEmail(uiState.email)) {
+      return updateLoginState{ it.copy(email = "Invalid email") }
+    }
+    
+    if (uiState.password.length < 6) {
+      return updateLoginState { it.copy(password = "Password must be at least 6 characters") }
+    }
+    
+    return true
   }
   
   fun checkUserLoggedIn() {
     auth = FirebaseAuth.getInstance()
     if (auth.currentUser != null) {
-      _uiState.value = _uiState.value.copy(isLoggedId = true)
+      val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = true)
+      loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
     }
   }
   
   fun login() {
-    auth.signInWithEmailAndPassword(_uiState.value.email, _uiState.value.password)
+    auth.signInWithEmailAndPassword(loginUiState.loginDetails.email, loginUiState.loginDetails.password)
       .addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          _uiState.value = _uiState.value.copy(isLoggedId = true)
+        loginUiState = if (task.isSuccessful) {
+          LoginState(loginDetails = loginUiState.loginDetails.copy(isLoggedId = true))
         } else {
-          _uiState.value = _uiState.value.copy(errorMessage = "Login failed")
+          LoginState(loginDetails = loginUiState.loginDetails.copy(errorMessages = ErrorMessages(general = "Login failed")))
         }
       }
   }

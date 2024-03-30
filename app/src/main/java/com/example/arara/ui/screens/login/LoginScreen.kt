@@ -5,24 +5,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.arara.R
 import com.example.arara.ui.AppViewModelProvider
+import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
-import com.example.compose.md_theme_dark_background
+import com.example.compose.md_theme_light_background
 
 object LoginDestination: NavigationDestination {
   override val route = "login"
@@ -35,36 +34,32 @@ fun LoginScreen(
   modifier: Modifier = Modifier,
   viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-  val loginUiState by viewModel.uiState.collectAsState()
-  
-  if(loginUiState.isLoggedId) {
+  val loginUiState = viewModel.loginUiState
+  if(loginUiState.loginDetails.isLoggedId) {
     navigateToHome()
   }
   
   LoginContent(
-    loginState = loginUiState,
-    onChangeEmail = { viewModel.onEmailChanged(it) },
-    onChangePassword = { viewModel.onPasswordChanged(it) },
+    loginDetails = loginUiState.loginDetails,
+    onLoginInfoChange = viewModel::updateUiState,
     onLoginClick = { viewModel.login() },
     modifier = modifier,
-    errorMessage = loginUiState.errorMessage
   )
   
 }
 
 @Composable
 fun LoginContent(
-  loginState: LoginState,
-  onChangeEmail: (String) -> Unit,
-  onChangePassword: (String) -> Unit,
+  loginDetails: LoginDetails,
+  onLoginInfoChange: (LoginDetails) -> Unit,
   onLoginClick: () -> Unit,
   modifier: Modifier,
-  errorMessage: String
 ) {
+  
   Box(
     modifier = modifier
       .fillMaxSize()
-      .background(color = md_theme_dark_background),
+      .background(color = md_theme_light_background),
     contentAlignment = Alignment.Center
   ) {
     Box(modifier = Modifier) {
@@ -72,25 +67,10 @@ fun LoginContent(
         horizontalAlignment = Alignment.CenterHorizontally,
       ) {
         InputForm(
-          value = loginState.email,
-          onValueChange = onChangeEmail,
-          label = "Email",
-          errorMessage = errorMessage,
-          modifier = Modifier.padding(16.dp)
+          loginDetails = loginDetails,
+          onLoginInfoChange = onLoginInfoChange,
+          onLoginSubmit = onLoginClick,
         )
-        InputForm(
-          value = loginState.password,
-          onValueChange = onChangePassword,
-          label = "Password",
-          errorMessage = "",
-          modifier = Modifier.padding(16.dp)
-        )
-        Button(
-          onClick = onLoginClick,
-          modifier = Modifier.padding(16.dp)
-        ) {
-          Text(text = "Login")
-        }
       }
     }
   }
@@ -98,27 +78,35 @@ fun LoginContent(
 
 @Composable
 fun InputForm(
-  value: String,
-  onValueChange: (String) -> Unit,
-  label: String,
-  errorMessage: String,
-  modifier: Modifier
+  loginDetails: LoginDetails,
+  onLoginInfoChange: (LoginDetails) -> Unit,
+  onLoginSubmit: () -> Unit,
 ) {
   Column (verticalArrangement = Arrangement.spacedBy(8.dp)) {
-    TextField(
-      value = value,
-      onValueChange = onValueChange,
-      label = { Text(text = label) },
-      isError = errorMessage.isNotEmpty(),
-      singleLine = true,
-      modifier = modifier
+    InputField(
+      value = loginDetails.email,
+      onValueChange = { onLoginInfoChange(loginDetails.copy(email = it)) },
+      label = "Email",
+      errorMessage = loginDetails.errorMessages.email,
+      modifier = Modifier.fillMaxWidth().padding(16.dp)
     )
-    if(errorMessage.isNotEmpty()) {
-      Text(
-        text = errorMessage,
-        color = Color.Red,
-        style = MaterialTheme.typography.labelSmall
-      )
+    
+    InputField(
+      value = loginDetails.password,
+      onValueChange = { onLoginInfoChange(loginDetails.copy(password = it)) },
+      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+      visualTransformation = PasswordVisualTransformation(),
+      label = "Senha",
+      errorMessage = loginDetails.errorMessages.password,
+      modifier = Modifier.fillMaxWidth().padding(16.dp)
+    )
+    
+    
+    Button(
+      onClick = onLoginSubmit,
+      modifier = Modifier.padding(16.dp)
+    ) {
+      Text(text = "Login")
     }
   }
 }
