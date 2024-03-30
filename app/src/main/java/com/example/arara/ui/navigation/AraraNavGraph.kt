@@ -19,7 +19,9 @@ fun AraraNavHost(
     modifier = modifier
   ) {
     composable(LoginDestination.route) {
-      LoginScreen()
+      LoginScreen(
+        navigateToHome = { /*TODO*/ }
+      )
     }
   }
 }

@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.arara.R
+import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.navigation.NavigationDestination
 import com.example.compose.md_theme_dark_background
 
 object LoginDestination: NavigationDestination {
-    override val route = "login"
+  override val route = "login"
   override val titleRes = R.string.login_title
 }
 
@@ -31,7 +33,7 @@ object LoginDestination: NavigationDestination {
 fun LoginScreen(
   navigateToHome: () -> Unit,
   modifier: Modifier = Modifier,
-  viewModel: LoginViewModel
+  viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
   val loginUiState by viewModel.uiState.collectAsState()
   
