@@ -30,31 +30,30 @@ class LoginViewModel: ViewModel() {
   var loginUiState by mutableStateOf(LoginState())
     private set
   
-  fun updateUiState(loginDetails: LoginDetails) {
-    loginUiState = LoginState(loginDetails = loginDetails, isLoginValid = validateInput(loginDetails))
+  private fun validateInput(uiState: LoginDetails): Pair<Boolean, LoginDetails> {
+    var isValid = true
+    var newErrorMessages = ErrorMessages()
+    
+    if (uiState.email.isNotBlank() && !isValidEmail(uiState.email)) {
+      newErrorMessages = newErrorMessages.copy(email = "Formato de email inválido")
+      isValid = false
+    }
+    
+    if (uiState.password.isNotBlank() && uiState.password.length < 6) {
+      newErrorMessages = newErrorMessages.copy(password = "A senha deve ter no mínimo 6 caracteres")
+      isValid = false
+    }
+    
+    val newLoginDetails = uiState.copy(errorMessages = newErrorMessages)
+    return Pair(isValid, newLoginDetails)
   }
   
-  private fun validateInput(uiState: LoginDetails): Boolean {
-    fun updateLoginState(field: (ErrorMessages) -> ErrorMessages): Boolean {
-      val newErrorMessages = field(uiState.errorMessages.copy())
-      val newLoginDetails = uiState.copy(errorMessages = newErrorMessages)
-      loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
-      return false
-    }
-    
-    if (!isValidEmail(uiState.email)) {
-      return updateLoginState{ it.copy(email = "Invalid email") }
-    }
-    
-    if (uiState.password.length < 6) {
-      return updateLoginState { it.copy(password = "Password must be at least 6 characters") }
-    }
-    
-    return true
+  fun updateUiState(loginDetails: LoginDetails) {
+    val (isValid, newLoginDetails) = validateInput(loginDetails)
+    loginUiState = LoginState(loginDetails = newLoginDetails, isLoginValid = isValid)
   }
   
   fun checkUserLoggedIn() {
-    auth = FirebaseAuth.getInstance()
     if (auth.currentUser != null) {
       val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = true)
       loginUiState = loginUiState.copy(loginDetails = newLoginDetails)

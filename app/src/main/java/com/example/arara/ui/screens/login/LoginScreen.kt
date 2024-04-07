@@ -1,5 +1,6 @@
 package com.example.arara.ui.screens.login
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,7 +62,7 @@ fun LoginContent(
     modifier = modifier
       .fillMaxSize()
       .background(color = md_theme_light_background),
-    contentAlignment = Alignment.Center
+    contentAlignment = Alignment.Center,
   ) {
     Box(modifier = Modifier) {
       Column(
@@ -88,7 +90,9 @@ fun InputForm(
       onValueChange = { onLoginInfoChange(loginDetails.copy(email = it)) },
       label = "Email",
       errorMessage = loginDetails.errorMessages.email,
-      modifier = Modifier.fillMaxWidth().padding(16.dp)
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp, 4.dp, 16.dp, 4.dp)
     )
     
     InputField(
@@ -98,13 +102,14 @@ fun InputForm(
       visualTransformation = PasswordVisualTransformation(),
       label = "Senha",
       errorMessage = loginDetails.errorMessages.password,
-      modifier = Modifier.fillMaxWidth().padding(16.dp)
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp, 4.dp, 16.dp, 4.dp)
     )
-    
     
     Button(
       onClick = onLoginSubmit,
-      modifier = Modifier.padding(16.dp)
+      modifier = Modifier.padding(16.dp, 4.dp, 16.dp, 4.dp)
     ) {
       Text(text = "Login")
     }

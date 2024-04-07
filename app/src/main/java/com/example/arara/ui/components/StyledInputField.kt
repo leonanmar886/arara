@@ -22,7 +22,7 @@ fun InputField(
   errorMessage: String,
   modifier: Modifier
 ) {
-  Column (verticalArrangement = Arrangement.spacedBy(8.dp)) {
+  Column {
     TextField(
       value = value,
       onValueChange = onValueChange,
@@ -37,7 +37,8 @@ fun InputField(
       Text(
         text = errorMessage,
         color = Color.Red,
-        style = MaterialTheme.typography.labelSmall
+        style = MaterialTheme.typography.labelSmall,
+        modifier = modifier
       )
     }
   }
