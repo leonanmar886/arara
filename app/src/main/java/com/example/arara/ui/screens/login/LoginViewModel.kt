@@ -4,12 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.arara.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 data class ErrorMessages(
-  val email: String = "",
-  val password: String = "",
-  val general: String = ""
+  val email: Int = -1,
+  val password: Int = -1,
+  val general: Int = -1
 )
 
 data class LoginDetails(
@@ -26,7 +28,8 @@ data class LoginState(
 )
 
 class LoginViewModel: ViewModel() {
-  private lateinit var auth: FirebaseAuth
+  private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+  
   var loginUiState by mutableStateOf(LoginState())
     private set
   
@@ -35,12 +38,12 @@ class LoginViewModel: ViewModel() {
     var newErrorMessages = ErrorMessages()
     
     if (uiState.email.isNotBlank() && !isValidEmail(uiState.email)) {
-      newErrorMessages = newErrorMessages.copy(email = "Formato de email inválido")
+      newErrorMessages = newErrorMessages.copy(email = R.string.error_invalid_email_format)
       isValid = false
     }
     
     if (uiState.password.isNotBlank() && uiState.password.length < 6) {
-      newErrorMessages = newErrorMessages.copy(password = "A senha deve ter no mínimo 6 caracteres")
+      newErrorMessages = newErrorMessages.copy(password = R.string.error_invalid_password_format)
       isValid = false
     }
     
@@ -64,9 +67,14 @@ class LoginViewModel: ViewModel() {
     auth.signInWithEmailAndPassword(loginUiState.loginDetails.email, loginUiState.loginDetails.password)
       .addOnCompleteListener { task ->
         loginUiState = if (task.isSuccessful) {
-          LoginState(loginDetails = loginUiState.loginDetails.copy(isLoggedId = true))
+          LoginState(loginDetails = loginUiState.loginDetails.copy(isLoggedId = true), isLoginValid = true)
         } else {
-          LoginState(loginDetails = loginUiState.loginDetails.copy(errorMessages = ErrorMessages(general = "Login failed")))
+          val exception = task.exception
+          if (exception is FirebaseAuthInvalidUserException) {
+            LoginState(loginDetails = loginUiState.loginDetails.copy(errorMessages = ErrorMessages(email = R.string.error_not_registered_email)), isLoginValid = false)
+          } else {
+            LoginState(loginDetails = loginUiState.loginDetails.copy(errorMessages = ErrorMessages(general = R.string.error_with_credentials)), isLoginValid = false)
+          }
         }
       }
   }

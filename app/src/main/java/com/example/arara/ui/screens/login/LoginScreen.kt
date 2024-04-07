@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,9 @@ fun LoginScreen(
   viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
   val loginUiState = viewModel.loginUiState
+  
+  viewModel.checkUserLoggedIn()
+  
   if(loginUiState.loginDetails.isLoggedId) {
     navigateToHome()
   }
@@ -87,7 +91,7 @@ fun InputForm(
       value = loginDetails.email,
       onValueChange = { onLoginInfoChange(loginDetails.copy(email = it)) },
       label = "Email",
-      errorMessage = loginDetails.errorMessages.email,
+      errorMessage = if (loginDetails.errorMessages.email == -1) {""} else {stringResource(id = loginDetails.errorMessages.email)},
       modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp, 4.dp, 16.dp, 4.dp)
@@ -99,7 +103,7 @@ fun InputForm(
       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
       visualTransformation = PasswordVisualTransformation(),
       label = "Senha",
-      errorMessage = loginDetails.errorMessages.password,
+      errorMessage = if (loginDetails.errorMessages.password == -1) {""} else {stringResource(id = loginDetails.errorMessages.password)},
       modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp, 4.dp, 16.dp, 4.dp)

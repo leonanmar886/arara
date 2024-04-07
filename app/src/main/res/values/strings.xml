@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Arara</string>
     <string name="login_title">Login</string>
+
+    <string name="error_invalid_email_format">Formato de email inválido</string>
+    <string name="error_not_registered_email">Email não cadastrado. Por favor, cadastre-se na plataforma.</string>
+    <string name="error_invalid_password_format">A senha deve ter no mínimo 6 caracteres</string>
+    <string name="error_with_credentials">Erro ao fazer login. Verifique suas credenciais e tente novamente.</string>
 </resources>
