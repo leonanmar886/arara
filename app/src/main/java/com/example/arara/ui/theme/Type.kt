@@ -6,10 +6,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-val Typography = Typography(
+/*val Typography = Typography(
   bodyLarge = TextStyle(
     fontFamily = FontFamily.Outfit,
     fontWeight = FontWeight.Normal,
     fontSize = 16.sp
   ),
-)
+)*/

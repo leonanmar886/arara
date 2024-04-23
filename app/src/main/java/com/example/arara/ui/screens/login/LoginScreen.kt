@@ -23,6 +23,8 @@ import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
 import com.example.compose.md_theme_light_background
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 
 object LoginDestination: NavigationDestination {
   override val route = "login"
@@ -63,18 +65,31 @@ fun LoginContent(
   Box(
     modifier = modifier
       .fillMaxSize()
-      .background(color = md_theme_light_background),
+      .background(color = Color(0xFFAEE0DD)),
     contentAlignment = Alignment.Center,
   ) {
-    Box(modifier = Modifier) {
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      Text(
+        text = "Minha Arara",
+        fontSize = 40.sp,
+        //fontFamily =
+      )
+      Box(
+        modifier = Modifier
+          .background(color = Color(0xFFD9D9D9))
       ) {
-        InputForm(
-          loginDetails = loginDetails,
-          onLoginInfoChange = onLoginInfoChange,
-          onLoginSubmit = onLoginClick,
-        )
+        Column(
+          horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+
+          InputForm(
+            loginDetails = loginDetails,
+            onLoginInfoChange = onLoginInfoChange,
+            onLoginSubmit = onLoginClick,
+          )
+        }
       }
     }
   }
@@ -90,7 +105,7 @@ fun InputForm(
     InputField(
       value = loginDetails.email,
       onValueChange = { onLoginInfoChange(loginDetails.copy(email = it)) },
-      label = "Email",
+      label = "Usuário/Email",
       errorMessage = if (loginDetails.errorMessages.email == -1) {""} else {stringResource(id = loginDetails.errorMessages.email)},
       modifier = Modifier
         .fillMaxWidth()
