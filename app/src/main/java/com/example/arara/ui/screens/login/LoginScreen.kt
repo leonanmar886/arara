@@ -26,6 +26,12 @@ import com.example.compose.md_theme_light_background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.Image
+
+
 object LoginDestination: NavigationDestination {
   override val route = "login"
   override val titleRes = R.string.login_title
@@ -71,6 +77,10 @@ fun LoginContent(
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+      Image(
+        painter = painterResource(id = R.drawable.logo),
+        contentDescription = "Logo",
+      )
       Text(
         text = "Minha Arara",
         fontSize = 40.sp,
