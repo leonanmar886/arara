@@ -32,6 +32,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 
 
 object LoginDestination: NavigationDestination {
@@ -91,11 +95,12 @@ fun LoginContent(
           .fillMaxWidth()
       )
       Text(
-        text = "Minha Arara",
+        text = "MINHA ARARA",
+        color = Color.Black,
         fontSize = 40.sp,
+        fontFamily = FontFamily(Font(R.font.bubbler_one)),
         modifier = Modifier
           .padding(top = 15.dp, bottom = 40.dp)
-      //fontFamily =
       )
       Box(
         modifier = Modifier
@@ -150,9 +155,36 @@ fun InputForm(
     
     Button(
       onClick = onLoginSubmit,
+      colors = ButtonColors(
+        containerColor = Color(0xFF176B87),
+        contentColor = Color(0xFFFFFFFF),
+        disabledContainerColor = Color(0xFF176B87),
+        disabledContentColor = Color(0xFFFFFFFF),
+      ),
       modifier = Modifier.padding(16.dp, 4.dp, 16.dp, 4.dp)
     ) {
-      Text(text = "Entrar")
+      Text(
+        text = "Login",
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+
+      )
+    }
+
+    Button(
+      onClick = onLoginSubmit,
+      colors = ButtonColors(
+        containerColor = Color.Transparent,
+        contentColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        disabledContentColor = Color.Transparent,
+      )
+    ) {
+      Text(
+        text = "Sign Up",
+        color = Color(0xFF176B87),
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+
+        )
     }
   }
 }
