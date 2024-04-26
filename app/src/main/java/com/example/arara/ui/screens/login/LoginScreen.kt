@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -161,7 +162,7 @@ fun InputForm(
         disabledContainerColor = Color(0xFF176B87),
         disabledContentColor = Color(0xFFFFFFFF),
       ),
-      modifier = Modifier.padding(16.dp, 4.dp, 16.dp, 4.dp)
+      modifier = Modifier.padding(0.dp, 0.dp)
     ) {
       Text(
         text = "Login",
@@ -177,7 +178,10 @@ fun InputForm(
         contentColor = Color.Transparent,
         disabledContainerColor = Color.Transparent,
         disabledContentColor = Color.Transparent,
-      )
+      ),
+      modifier = Modifier
+        .padding(0.dp, 0.dp)
+
     ) {
       Text(
         text = "Sign Up",
