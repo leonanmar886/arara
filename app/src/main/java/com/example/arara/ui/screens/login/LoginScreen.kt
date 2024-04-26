@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 
 object LoginDestination: NavigationDestination {
@@ -72,11 +73,15 @@ fun LoginContent(
   Box(
     modifier = modifier
       .fillMaxSize()
-      .background(color = Color(0xFFAEE0DD)),
-    contentAlignment = Alignment.Center,
+      .background(
+        color = Color(0xFFAEE0DD)),
+        contentAlignment = Alignment.Center,
   ) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.SpaceBetween,
+      modifier = Modifier
+        .padding(start = 50.dp, end = 50.dp)
     ) {
       Image(
         painter = painterResource(id = R.drawable.logo),
@@ -88,16 +93,16 @@ fun LoginContent(
       Text(
         text = "Minha Arara",
         fontSize = 40.sp,
-        //fontFamily =
+        modifier = Modifier
+          .padding(top = 15.dp, bottom = 40.dp)
+      //fontFamily =
       )
       Box(
         modifier = Modifier
-          .background(color = Color(0xFFD9D9D9))
+          .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(30.dp))
+          .padding(start = 0.dp, end = 0.dp, top = 40.dp, bottom = 80.dp)
       ) {
-        Column(
-          horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-
+        Column() {
           InputForm(
             loginDetails = loginDetails,
             onLoginInfoChange = onLoginInfoChange,
@@ -115,7 +120,12 @@ fun InputForm(
   onLoginInfoChange: (LoginDetails) -> Unit,
   onLoginSubmit: () -> Unit,
 ) {
-  Column (verticalArrangement = Arrangement.spacedBy(8.dp)) {
+  Column (
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.spacedBy(20.dp),
+    modifier = Modifier
+      .padding(start = 20.dp, end = 20.dp)
+    ) {
     InputField(
       value = loginDetails.email,
       onValueChange = { onLoginInfoChange(loginDetails.copy(email = it)) },
@@ -146,3 +156,4 @@ fun InputForm(
     }
   }
 }
+
