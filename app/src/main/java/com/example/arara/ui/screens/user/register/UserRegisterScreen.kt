@@ -3,11 +3,13 @@ package com.example.arara.ui.screens.user.register
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -15,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -25,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -199,26 +203,41 @@ fun UserRegisterContent() {
 
 @Composable
 fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+  val acceptTerms = remember { mutableStateOf(false) }
+  
   Dialog(onDismissRequest = { onDismiss() }) {
     Card(
       modifier = Modifier
         .fillMaxWidth()
-        .height(200.dp)
-        .padding(16.dp)
+        .wrapContentHeight()
+        .padding(5.dp)
     ) {
-      Column {
-        Text(text = "Deseja confirmar o cadastro?",
+      Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+          .padding(16.dp)
+      ) {
+        Text(text = "Termos e Condições",
           modifier = Modifier
             .fillMaxWidth()
             .wrapContentSize(Alignment.Center),
           fontFamily = FontFamily(Font(R.font.quicksand)),
           fontWeight = FontWeight.W600,
-          fontSize = 12.sp,
+          fontSize = 20.sp,
           textAlign = TextAlign.Center
         )
         
-        TextButton(onClick = { onConfirm()}) {
-          Text(text = "Confirmar",
+        Row {
+          RadioButton(selected = acceptTerms.value, onClick = { acceptTerms.value = !acceptTerms.value })
+          Text(text = "Declaro que li e estou de acordo com os termos e condições de uso do aplicativo.",
+            fontFamily = FontFamily(Font(R.font.quicksand)),
+            fontWeight = FontWeight.W600,
+            fontSize = 12.sp)
+        }
+        
+        Button(onClick = { onConfirm()}) {
+          Text(text = "Continuar",
             fontFamily = FontFamily(Font(R.font.quicksand)),
             fontWeight = FontWeight.W600,
             fontSize = 12.sp)
