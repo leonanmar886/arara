@@ -23,18 +23,13 @@ import com.example.arara.R
 import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
-import com.example.compose.md_theme_light_background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 

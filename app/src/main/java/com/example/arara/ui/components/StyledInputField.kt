@@ -10,7 +10,12 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.sp
+import com.example.arara.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,7 +32,14 @@ fun InputField(
     TextField(
       value = value,
       onValueChange = onValueChange,
-      label = { Text(text = label) },
+      label = {
+        Text(
+          text = label,
+          fontFamily = FontFamily(Font(R.font.quicksand)),
+          fontWeight = FontWeight.W700,
+          fontSize = 12.sp
+        )
+      },
       visualTransformation =  visualTransformation ?: VisualTransformation.None,
       keyboardOptions = keyboardOptions,
       isError = errorMessage.isNotEmpty(),
@@ -37,7 +49,8 @@ fun InputField(
         cursorColor = Color.Black,
         disabledLabelColor = Color.LightGray,
         focusedIndicatorColor = Color.Transparent,
-        unfocusedIndicatorColor = Color.Transparent
+        unfocusedIndicatorColor = Color.Transparent,
+        unfocusedContainerColor = Color(0xFFCBCBCB).copy(alpha = "7A".toInt(16) / 255f)
       ),
       modifier = modifier
     )

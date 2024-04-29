@@ -17,7 +17,7 @@ fun AraraNavHost(
 ) {
   NavHost(
     navController = navController,
-    startDestination = LoginDestination.route,
+    startDestination = UserRegisterDestination.route,
     modifier = modifier
   ) {
     composable(LoginDestination.route) {
