@@ -4,14 +4,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,8 +31,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.example.arara.R
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
@@ -44,6 +51,16 @@ object UserRegisterDestination: NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserRegisterContent() {
+  
+  val openAlertDialog = remember { mutableStateOf(false) }
+  when {
+    openAlertDialog.value -> {
+      ConfirmDialog(
+        onConfirm = { /*TODO*/ },
+        onDismiss = { openAlertDialog.value = false }
+      )
+    }
+  }
   
   val focusManager = LocalFocusManager.current
   var showDatePickerDialog by remember {
@@ -166,24 +183,46 @@ fun UserRegisterContent() {
           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
           modifier = Modifier.fillMaxWidth()
         )
-        
-        InputField(
-          value = "",
-          onValueChange = {},
-          label = "CPF",
-          errorMessage = "",
-          keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-          modifier = Modifier.fillMaxWidth()
-        )
       }
       
-      Button(onClick = { /*TODO*/ }) {
+      Button(onClick = { openAlertDialog.value = true }) {
         Text(
           text = "Continuar",
           fontFamily = FontFamily(Font(R.font.quicksand)),
           fontWeight = FontWeight.W600,
           fontSize = 12.sp
         )
+      }
+    }
+  }
+}
+
+@Composable
+fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+  Dialog(onDismissRequest = { onDismiss() }) {
+    Card(
+      modifier = Modifier
+        .fillMaxWidth()
+        .height(200.dp)
+        .padding(16.dp)
+    ) {
+      Column {
+        Text(text = "Deseja confirmar o cadastro?",
+          modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentSize(Alignment.Center),
+          fontFamily = FontFamily(Font(R.font.quicksand)),
+          fontWeight = FontWeight.W600,
+          fontSize = 12.sp,
+          textAlign = TextAlign.Center
+        )
+        
+        TextButton(onClick = { onConfirm()}) {
+          Text(text = "Confirmar",
+            fontFamily = FontFamily(Font(R.font.quicksand)),
+            fontWeight = FontWeight.W600,
+            fontSize = 12.sp)
+        }
       }
     }
   }
