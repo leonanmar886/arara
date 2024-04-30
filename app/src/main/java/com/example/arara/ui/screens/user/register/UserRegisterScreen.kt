@@ -1,5 +1,7 @@
 package com.example.arara.ui.screens.user.register
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,11 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,8 +33,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.arara.R
+import com.example.arara.ui.components.CustomDialog
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
 import java.text.SimpleDateFormat
@@ -62,6 +73,64 @@ fun UserRegisterContent() {
       ConfirmDialog(
         onConfirm = { /*TODO*/ },
         onDismiss = { openAlertDialog.value = false }
+      )
+    }
+  }
+  
+  val openProfileDialog = remember { mutableStateOf(false) }
+  when {
+    openProfileDialog.value -> {
+      CustomDialog(
+        title = "Nome do Perfil",
+        content = {
+          Column(
+            modifier = Modifier
+              .padding(0.dp, 5.dp, 0.dp, 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Text(
+              text = stringResource(R.string.profile_dialog_description),
+              fontFamily = FontFamily(Font(R.font.quicksand)),
+              fontWeight = FontWeight.W600,
+              fontSize = 12.sp,
+            )
+            Image(
+              painter = painterResource(id = R.drawable.profile_dialog_image),
+              contentDescription = "Perfil",
+              modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+            )
+          }
+        },
+        onDismiss = { openProfileDialog.value = false }
+      )
+    }
+  }
+  
+  val openPasswordDialog = remember { mutableStateOf(false) }
+  when {
+    openPasswordDialog.value -> {
+      CustomDialog(
+        title = "Senha",
+        content = {
+          Column(
+            modifier = Modifier
+              .padding(0.dp, 5.dp, 0.dp, 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Text(
+              text = stringResource(R.string.password_dialog_description),
+              fontFamily = FontFamily(Font(R.font.quicksand)),
+              fontWeight = FontWeight.W600,
+              fontSize = 12.sp,
+            )
+            
+          }
+        },
+        onDismiss = { openPasswordDialog.value = false }
       )
     }
   }
@@ -111,6 +180,16 @@ fun UserRegisterContent() {
           fontWeight = FontWeight.Bold,
           fontSize = 18.sp
         )
+        
+        Button(onClick = { openProfileDialog.value = true }) {
+          Text(
+            text = "Escolher Imagem",
+            fontFamily = FontFamily(Font(R.font.quicksand)),
+            fontWeight = FontWeight.W600,
+            fontSize = 12.sp
+          )
+          
+        }
         
         InputField(
           value = "",
@@ -207,6 +286,9 @@ fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
   
   Dialog(onDismissRequest = { onDismiss() }) {
     Card(
+      colors = CardDefaults.cardColors(
+        containerColor = Color.White,
+      ),
       modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
@@ -245,6 +327,16 @@ fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
       }
     }
   }
+}
+
+@Composable
+fun BlueCircle() {
+  Box(
+    modifier = Modifier
+      .size(8.dp)
+      .clip(CircleShape)
+      .background(Color.Blue)
+  )
 }
 
 fun Long.toBrazilianDateFormat(

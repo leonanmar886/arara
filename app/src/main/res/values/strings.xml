@@ -4,6 +4,7 @@
     <string name="user_register_title">Cadastro de usuário</string>
 
     <string name="profile_dialog_description">É o nome que ficará visível para os outros usuários no seu Perfil. Não é o “arroba”, mas também não é seu nome completo.</string>
+    <string name="password_dialog_description">A senha deve atender os seguintes requisitos:</string>
 
     <string name="error_invalid_email_format">Formato de email inválido</string>
     <string name="error_not_registered_email">Email não cadastrado. Por favor, cadastre-se na plataforma.</string>
