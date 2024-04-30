@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 
@@ -93,13 +94,14 @@ fun LoginContent(
       Text(
         text = "MINHA ARARA",
         color = Color.Black,
-        fontSize = 40.sp,
+        fontSize = 45.sp,
         fontFamily = FontFamily(Font(R.font.bubbler_one)),
         modifier = Modifier
           .padding(top = 15.dp, bottom = 40.dp)
       )
       Box(
         modifier = Modifier
+          .shadow(20.dp, shape = RoundedCornerShape(30.dp))
           .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(30.dp))
           .padding(start = 0.dp, end = 0.dp, top = 40.dp, bottom = 80.dp)
       ) {
@@ -160,7 +162,7 @@ fun InputForm(
       modifier = Modifier.padding(0.dp, 0.dp)
     ) {
       Text(
-        text = "Login",
+        text = "Entrar",
         fontFamily = FontFamily(Font(R.font.quicksand)),
 
       )
@@ -179,7 +181,7 @@ fun InputForm(
 
     ) {
       Text(
-        text = "Sign Up",
+        text = "Não possuo cadastro",
         color = Color(0xFF176B87),
         fontFamily = FontFamily(Font(R.font.quicksand)),
 
