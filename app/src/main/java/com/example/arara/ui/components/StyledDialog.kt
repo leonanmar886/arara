@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
@@ -15,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -60,12 +63,12 @@ fun CustomDialog(
            fontFamily = FontFamily(Font(R.font.quicksand)),
            fontWeight = FontWeight.W600,
            fontSize = 20.sp,
-           modifier = Modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)
+           modifier = Modifier.padding(0.dp, 12.dp, 8.dp, 0.dp).wrapContentWidth(align = Alignment.Start)
          )
          IconButton(onClick = { onDismiss() }) {
            Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
          }
-       }
+        }
         content()
       }
     }

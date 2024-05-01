@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -38,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -190,7 +193,8 @@ fun UserRegisterContent() {
         content = {
           Box(
             modifier = Modifier
-              .padding(0.dp, 5.dp, 0.dp, 16.dp),
+              .padding(0.dp, 5.dp, 0.dp, 16.dp)
+              .width(280.dp),
           ) {
             Text(
               text = stringResource(R.string.data_dialog_description),
@@ -248,7 +252,7 @@ fun UserRegisterContent() {
           text = "Seu Perfil",
           fontFamily = FontFamily(Font(R.font.quicksand)),
           fontWeight = FontWeight.Bold,
-          fontSize = 18.sp
+          fontSize = 24.sp
         )
         
         InputField(
@@ -288,52 +292,53 @@ fun UserRegisterContent() {
           visualTransformation = PasswordVisualTransformation(),
           modifier = Modifier.fillMaxWidth()
         )
+        
+        Column(
+          verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+          ) {
+            Text(
+              text = "Seus Dados",
+              fontFamily = FontFamily(Font(R.font.quicksand)),
+              fontWeight = FontWeight.Bold,
+              fontSize = 24.sp
+            )
+            AboutIconButton(onClick = { openDataDialog.value = true })
+          }
+          
+          InputField(
+            value = "",
+            onValueChange = {},
+            label = "Nome Completo",
+            errorMessage = "",
+            modifier = Modifier.fillMaxWidth()
+          )
+          
+          InputField(
+            value = selectedDate,
+            onValueChange = {},
+            label = "Data de Nascimento",
+            errorMessage = "",
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+              showDatePickerDialog = true
+              focusManager.clearFocus(force = true)
+            },
+          )
+          
+          InputField(
+            value = "",
+            onValueChange = {},
+            label = "Email",
+            errorMessage = "",
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            modifier = Modifier.fillMaxWidth()
+          )
+        }
       }
       
-      Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-      ) {
-        Row(
-          verticalAlignment = Alignment.CenterVertically,
-        ) {
-          Text(
-            text = "Seus Dados",
-            fontFamily = FontFamily(Font(R.font.quicksand)),
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-          )
-          AboutIconButton(onClick = { openDataDialog.value = true })
-        }
-        
-        InputField(
-          value = "",
-          onValueChange = {},
-          label = "Nome Completo",
-          errorMessage = "",
-          modifier = Modifier.fillMaxWidth()
-        )
-        
-        InputField(
-          value = selectedDate,
-          onValueChange = {},
-          label = "Data de Nascimento",
-          errorMessage = "",
-          modifier = Modifier.fillMaxWidth(),
-          onClick = {
-            showDatePickerDialog = true
-            focusManager.clearFocus(force = true)
-          },
-        )
-        
-        InputField(
-          value = "",
-          onValueChange = {},
-          label = "Email",
-          errorMessage = "",
-          keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-          modifier = Modifier.fillMaxWidth()
-        )
-      }
       
       Button(onClick = { openAlertDialog.value = true }) {
         Text(
