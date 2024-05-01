@@ -16,6 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -41,12 +42,13 @@ fun CustomDialog(
       colors = CardDefaults.cardColors(
         containerColor = Color.White,
       ),
+      modifier = Modifier.shadow(5.dp)
     ){
       Column(
         modifier = Modifier
           .fillMaxWidth()
           .wrapContentHeight()
-          .padding(15.dp)
+          .padding(25.dp, 15.dp, 5.dp, 30.dp)
           .background(Color.White)
       ) {
        Row(

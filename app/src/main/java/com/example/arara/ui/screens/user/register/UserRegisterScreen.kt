@@ -127,6 +127,56 @@ fun UserRegisterContent() {
               fontWeight = FontWeight.W600,
               fontSize = 12.sp,
             )
+            Column {
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                BlueCircle()
+                Text(
+                  text = "Mínimo de 8 caracteres",
+                  fontFamily = FontFamily(Font(R.font.quicksand)),
+                  fontWeight = FontWeight.W600,
+                  fontSize = 12.sp,
+                )
+              }
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                BlueCircle()
+                Text(
+                  text = "Pelo menos um número",
+                  fontFamily = FontFamily(Font(R.font.quicksand)),
+                  fontWeight = FontWeight.W600,
+                  fontSize = 12.sp,
+                )
+              }
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                BlueCircle()
+                Text(
+                  text = "Pelo menos um caractere especial",
+                  fontFamily = FontFamily(Font(R.font.quicksand)),
+                  fontWeight = FontWeight.W600,
+                  fontSize = 12.sp,
+                )
+              }
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                BlueCircle()
+                Text(
+                  text = "Pelo menos uma letra maiúscula",
+                  fontFamily = FontFamily(Font(R.font.quicksand)),
+                  fontWeight = FontWeight.W600,
+                  fontSize = 12.sp,
+                )
+              }
+            }
             
           }
         },
@@ -216,6 +266,15 @@ fun UserRegisterContent() {
           visualTransformation = PasswordVisualTransformation(),
           modifier = Modifier.fillMaxWidth()
         )
+        
+        Button(onClick = { openPasswordDialog.value = true }) {
+          Text(
+            text = "Dicas de Senha",
+            fontFamily = FontFamily(Font(R.font.quicksand)),
+            fontWeight = FontWeight.W600,
+            fontSize = 12.sp
+          )
+        }
         
         InputField(
           value = "",
@@ -335,7 +394,7 @@ fun BlueCircle() {
     modifier = Modifier
       .size(8.dp)
       .clip(CircleShape)
-      .background(Color.Blue)
+      .background(Color(0xFFAEE0DD))
   )
 }
 
