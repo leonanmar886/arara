@@ -2,6 +2,10 @@ package com.example.arara.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -22,6 +26,7 @@ fun InputField(
   value: String,
   onValueChange: (String) -> Unit,
   onClick: () -> Unit = {},
+  aboutIcon: @Composable (() -> Unit)? = {},
   label: String,
   visualTransformation: VisualTransformation? = null,
   keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -52,6 +57,7 @@ fun InputField(
         unfocusedIndicatorColor = Color.Transparent,
         unfocusedContainerColor = Color(0xFFCBCBCB).copy(alpha = "7A".toInt(16) / 255f)
       ),
+      trailingIcon = aboutIcon?.let { { aboutIcon() } },
       modifier = modifier.onFocusEvent {if (it.isFocused) onClick() }
     )
     if(errorMessage.isNotEmpty()) {

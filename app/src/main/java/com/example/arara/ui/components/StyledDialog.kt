@@ -31,7 +31,7 @@ import com.example.arara.R
 @Composable
 fun CustomDialog(
   title: String,
-  content: @Composable() (() -> Unit),
+  content: @Composable (() -> Unit),
   onDismiss: () -> Unit
 ) {
   return Dialog(

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,7 +23,6 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,9 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.arara.R
+import com.example.arara.ui.components.AboutIconButton
 import com.example.arara.ui.components.CustomDialog
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
@@ -185,6 +182,29 @@ fun UserRegisterContent() {
     }
   }
   
+  val openDataDialog = remember { mutableStateOf(false) }
+  when {
+    openDataDialog.value -> {
+      CustomDialog(
+        title = "Seus Dados",
+        content = {
+          Box(
+            modifier = Modifier
+              .padding(0.dp, 5.dp, 0.dp, 16.dp),
+          ) {
+            Text(
+              text = stringResource(R.string.data_dialog_description),
+              fontFamily = FontFamily(Font(R.font.quicksand)),
+              fontWeight = FontWeight.W600,
+              fontSize = 12.sp,
+            )
+          }
+        },
+        onDismiss = { openDataDialog.value = false }
+      )
+    }
+  }
+  
   val focusManager = LocalFocusManager.current
   var showDatePickerDialog by remember {
     mutableStateOf(false)
@@ -231,21 +251,12 @@ fun UserRegisterContent() {
           fontSize = 18.sp
         )
         
-        Button(onClick = { openProfileDialog.value = true }) {
-          Text(
-            text = "Escolher Imagem",
-            fontFamily = FontFamily(Font(R.font.quicksand)),
-            fontWeight = FontWeight.W600,
-            fontSize = 12.sp
-          )
-          
-        }
-        
         InputField(
           value = "",
           onValueChange = {},
           label = "Nome do Perfil",
           errorMessage = "",
+          aboutIcon = { AboutIconButton(onClick = { openProfileDialog.value = true }) },
           modifier = Modifier.fillMaxWidth()
         )
         
@@ -264,17 +275,9 @@ fun UserRegisterContent() {
           errorMessage = "",
           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
           visualTransformation = PasswordVisualTransformation(),
+          aboutIcon = { AboutIconButton(onClick = { openPasswordDialog.value = true }) },
           modifier = Modifier.fillMaxWidth()
         )
-        
-        Button(onClick = { openPasswordDialog.value = true }) {
-          Text(
-            text = "Dicas de Senha",
-            fontFamily = FontFamily(Font(R.font.quicksand)),
-            fontWeight = FontWeight.W600,
-            fontSize = 12.sp
-          )
-        }
         
         InputField(
           value = "",
@@ -290,12 +293,17 @@ fun UserRegisterContent() {
       Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
       ) {
-        Text(
-          text = "Seus Dados",
-          fontFamily = FontFamily(Font(R.font.quicksand)),
-          fontWeight = FontWeight.Bold,
-          fontSize = 18.sp
-        )
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+        ) {
+          Text(
+            text = "Seus Dados",
+            fontFamily = FontFamily(Font(R.font.quicksand)),
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+          )
+          AboutIconButton(onClick = { openDataDialog.value = true })
+        }
         
         InputField(
           value = "",
@@ -357,14 +365,14 @@ fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-          .padding(16.dp)
+          .padding(8.dp)
       ) {
         Text(text = "Termos e Condições",
           modifier = Modifier
             .fillMaxWidth()
             .wrapContentSize(Alignment.Center),
           fontFamily = FontFamily(Font(R.font.quicksand)),
-          fontWeight = FontWeight.W600,
+          fontWeight = FontWeight.W700,
           fontSize = 20.sp,
           textAlign = TextAlign.Center
         )
