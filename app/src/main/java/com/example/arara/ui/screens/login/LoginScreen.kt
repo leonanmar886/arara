@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.sp
 
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.ui.draw.shadow
@@ -43,6 +46,8 @@ object LoginDestination: NavigationDestination {
 @Composable
 fun LoginScreen(
   navigateToHome: () -> Unit,
+  navigateToUserRegister: () -> Unit,
+  navigateToLoginGoogle: () -> Unit,
   modifier: Modifier = Modifier,
   viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -58,6 +63,8 @@ fun LoginScreen(
     loginDetails = loginUiState.loginDetails,
     onLoginInfoChange = viewModel::updateUiState,
     onLoginClick = { viewModel.login() },
+    onSignUpRequest = navigateToUserRegister,
+    onGoogleAccount = navigateToLoginGoogle,
     modifier = modifier,
   )
   
@@ -68,6 +75,8 @@ fun LoginContent(
   loginDetails: LoginDetails,
   onLoginInfoChange: (LoginDetails) -> Unit,
   onLoginClick: () -> Unit,
+  onSignUpRequest: () -> Unit,
+  onGoogleAccount: () -> Unit,
   modifier: Modifier,
 ) {
   
@@ -75,7 +84,8 @@ fun LoginContent(
     modifier = modifier
       .fillMaxSize()
       .background(
-        color = Color(0xFFAEE0DD)),
+        color = Color(0xFFAEE0DD)
+      ),
         contentAlignment = Alignment.Center,
   ) {
     Column(
@@ -99,19 +109,33 @@ fun LoginContent(
         modifier = Modifier
           .padding(top = 15.dp, bottom = 40.dp)
       )
-      Box(
-        modifier = Modifier
-          .shadow(20.dp, shape = RoundedCornerShape(30.dp))
-          .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(30.dp))
-          .padding(start = 0.dp, end = 0.dp, top = 40.dp, bottom = 80.dp)
-      ) {
-        Column() {
-          InputForm(
-            loginDetails = loginDetails,
-            onLoginInfoChange = onLoginInfoChange,
-            onLoginSubmit = onLoginClick,
-          )
+      Column (
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        )
+      {
+        Box(
+          modifier = Modifier
+            .shadow(20.dp, shape = RoundedCornerShape(20.dp))
+            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(20.dp))
+            .padding(start = 0.dp, end = 0.dp, top = 40.dp, bottom = 5.dp)
+        ) {
+          Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+          ) {
+            InputForm(
+              loginDetails = loginDetails,
+              onLoginInfoChange = onLoginInfoChange,
+              onLoginSubmit = onLoginClick,
+            )
+            SingUpRequest(
+              onSignUpRequest = onSignUpRequest
+            )
+          }
         }
+        SignUpGoogle(
+          onGoogleAccount = onGoogleAccount
+        )
       }
     }
   }
@@ -121,13 +145,13 @@ fun LoginContent(
 fun InputForm(
   loginDetails: LoginDetails,
   onLoginInfoChange: (LoginDetails) -> Unit,
-  onLoginSubmit: () -> Unit,
+  onLoginSubmit: () -> Unit
 ) {
   Column (
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(20.dp),
     modifier = Modifier
-      .padding(start = 20.dp, end = 20.dp)
+      .padding(start = 0.dp, end = 0.dp)
     ) {
     InputField(
       value = loginDetails.email,
@@ -159,7 +183,7 @@ fun InputForm(
         disabledContainerColor = Color(0xFF176B87),
         disabledContentColor = Color(0xFFFFFFFF),
       ),
-      modifier = Modifier.padding(0.dp, 0.dp)
+      modifier = Modifier.padding(0.dp)
     ) {
       Text(
         text = "Entrar",
@@ -167,25 +191,73 @@ fun InputForm(
 
       )
     }
+  }
+}
 
+@Composable
+fun SingUpRequest(
+  onSignUpRequest: () -> Unit
+) {
+  Box (
+    contentAlignment = Alignment.Center,
+    modifier = Modifier.padding(0.dp)
+    ) {
     Button(
-      onClick = onLoginSubmit,
+      onClick = onSignUpRequest,
       colors = ButtonColors(
         containerColor = Color.Transparent,
         contentColor = Color.Transparent,
         disabledContainerColor = Color.Transparent,
         disabledContentColor = Color.Transparent,
-      ),
-      modifier = Modifier
-        .padding(0.dp, 0.dp)
-
+      )
     ) {
       Text(
         text = "Não possuo cadastro",
         color = Color(0xFF176B87),
-        fontFamily = FontFamily(Font(R.font.quicksand)),
+        fontFamily = FontFamily(Font(R.font.quicksand))
+      )
+    }
+  }
+}
 
-        )
+@Composable
+fun SignUpGoogle (
+  onGoogleAccount: () -> Unit,
+) {
+  Button(
+    onClick = onGoogleAccount,
+    colors = ButtonColors(
+      containerColor = Color.Transparent,
+      contentColor = Color.Transparent,
+      disabledContainerColor = Color.Transparent,
+      disabledContentColor = Color.Transparent
+    ),
+    modifier = Modifier
+      .fillMaxWidth()
+      .shadow(20.dp, shape = RoundedCornerShape(20.dp))
+      .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(20.dp))
+  ) {
+
+    Row (
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceBetween,
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(start = 10.dp)
+    ) {
+      Text(
+        text = "Continuar com Google",
+        color = Color.Black,
+        fontFamily = FontFamily(Font(R.font.quicksand))
+      )
+      Image(
+        painter = painterResource(id = R.drawable.g_google),
+        contentDescription = "Google",
+        modifier = Modifier
+          .width(40.dp)
+          .height(40.dp)
+          .padding(start = 0.dp, end = 10.dp)
+      )
     }
   }
 }
