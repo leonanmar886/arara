@@ -23,7 +23,7 @@ fun AraraNavHost(
     composable(LoginDestination.route) {
       LoginScreen(
         navigateToHome = { /*TODO*/ },
-        navigateToUserRegister = {UserRegisterDestination.route},
+        navigateToUserRegister = { navController.navigate(UserRegisterDestination.route)},
         navigateToLoginGoogle = { /*TODO*/ }
       )
     }
