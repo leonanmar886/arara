@@ -12,6 +12,8 @@ object AppViewModelProvider {
   val Factory = viewModelFactory {
     initializer {
       LoginViewModel()
+    }
+    initializer {
       UserRegisterViewModel()
     }
   }

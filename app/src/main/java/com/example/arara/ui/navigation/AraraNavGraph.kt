@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.arara.ui.screens.login.LoginDestination
 import com.example.arara.ui.screens.login.LoginScreen
+import com.example.arara.ui.screens.user.register.RegisterScreen
 import com.example.arara.ui.screens.user.register.UserRegisterContent
 import com.example.arara.ui.screens.user.register.UserRegisterDestination
 
@@ -28,7 +29,7 @@ fun AraraNavHost(
       )
     }
     composable(UserRegisterDestination.route) {
-      UserRegisterContent()
+      RegisterScreen(navigateToHome = { /*TODO*/ })
     }
   }
 }

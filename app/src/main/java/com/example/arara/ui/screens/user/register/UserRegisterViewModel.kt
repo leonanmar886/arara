@@ -4,22 +4,30 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.arara.R
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 data class ErrorMessages(
   val email: Int = -1,
   val password: Int = -1,
   val name: Int = -1,
-  val bio: Int = -1,
+  val profileName: Int = -1,
+  val userName: Int = -1,
+  val birthDate: Int = -1,
   val general: Int = -1
 )
 
 data class UserRegisterDetails(
   val email: String = "",
   val password: String = "",
+  val confirmPassword: String = "",
+  val profileName: String = "",
+  val userName: String = "",
   val name: String = "",
-  val bio: String = "",
+  val birthDate: String = "",
   val isLoading: Boolean = false,
   val isRegistered: Boolean = false,
   val errorMessages: ErrorMessages = ErrorMessages()
@@ -55,8 +63,23 @@ class UserRegisterViewModel: ViewModel() {
       isValid = false
     }
     
-    if (uiState.bio.length > 100) {
-      newErrorMessages = newErrorMessages.copy(bio = R.string.error_invalid_bio_format)
+    if (uiState.profileName.isBlank()) {
+      newErrorMessages = newErrorMessages.copy(profileName = R.string.error_invalid_profile_name_format)
+      isValid = false
+    }
+    
+    if (uiState.confirmPassword != uiState.password) {
+      newErrorMessages = newErrorMessages.copy(password = R.string.error_passwords_do_not_match)
+      isValid = false
+    }
+    
+    if (uiState.userName.isBlank()) {
+      newErrorMessages = newErrorMessages.copy(userName = R.string.error_invalid_user_name_format)
+      isValid = false
+    }
+    
+    if (uiState.birthDate.isBlank()) {
+      newErrorMessages = newErrorMessages.copy(birthDate = R.string.error_invalid_birth_date_format)
       isValid = false
     }
     
@@ -73,14 +96,32 @@ class UserRegisterViewModel: ViewModel() {
     validateInput(registerUiState.userRegisterDetails)
     if (!registerUiState.isRegisterValid) return
     
-    auth.createUserWithEmailAndPassword(registerUiState.userRegisterDetails.email, registerUiState.userRegisterDetails.password)
-      .addOnCompleteListener { task ->
-        registerUiState = if (task.isSuccessful) {
-          UserRegisterState(userRegisterDetails = registerUiState.userRegisterDetails.copy(isRegistered = true))
+    viewModelScope.launch {
+      try {
+        val result = auth.createUserWithEmailAndPassword(
+          registerUiState.userRegisterDetails.email,
+          registerUiState.userRegisterDetails.password
+        ).await()
+        
+        if (result.user != null) {
+          registerUiState = UserRegisterState(
+            userRegisterDetails = registerUiState.userRegisterDetails.copy(isRegistered = true)
+          )
         } else {
-          UserRegisterState(userRegisterDetails = registerUiState.userRegisterDetails.copy(errorMessages = ErrorMessages(general = R.string.error_register_failed)))
+          UserRegisterState(
+            userRegisterDetails = registerUiState.userRegisterDetails.copy(
+              errorMessages = ErrorMessages(general = R.string.error_register_failed)
+            )
+          )
         }
+      } catch (e: Exception) {
+        UserRegisterState(
+          userRegisterDetails = registerUiState.userRegisterDetails.copy(
+            errorMessages = ErrorMessages(general = R.string.error_register_failed)
+          )
+        )
       }
+    }
   }
   
   private fun isValidEmail(email: String): Boolean {

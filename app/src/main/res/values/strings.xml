@@ -12,6 +12,9 @@
     <string name="error_invalid_password_format">A senha deve ter no mínimo 6 caracteres</string>
     <string name="error_with_credentials">Erro ao fazer login. Verifique suas credenciais e tente novamente.</string>
     <string name="error_invalid_name_format">O campo de nome não pode estar vazio</string>
-    <string name="error_invalid_bio_format">O campo de não pode ter mais que 100 caracteres</string>
     <string name="error_register_failed">Erro ao cadastrar usuário. Tente novamente mais tarde.</string>
+    <string name="error_invalid_profile_name_format">O campo de nome de perfil não pode estar vazio</string>
+    <string name="error_invalid_birth_date_format">O campo de data de nascimento não pode estar vazio</string>
+    <string name="error_invalid_user_name_format">O campo de nome do usuário não pode estar vazio</string>
+    <string name="error_passwords_do_not_match">As senhas não coincidem</string>
 </resources>

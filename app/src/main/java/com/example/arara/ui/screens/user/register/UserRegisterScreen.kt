@@ -71,10 +71,17 @@ fun RegisterScreen(
 ) {
   val registerUiState = viewModel.registerUiState
   
+  fun navigateToHomeIfRegistered() {
+    viewModel.register()
+    if (viewModel.registerUiState.userRegisterDetails.errorMessages.general == -1) {
+      navigateToHome()
+    }
+  }
+  
   UserRegisterContent(
     registerDetails = registerUiState.userRegisterDetails,
     onRegisterInfoChange = viewModel::updateUiState,
-    onRegisterClick = { viewModel.register() },
+    onRegisterClick = { navigateToHomeIfRegistered() },
     modifier = modifier
   )
 }
@@ -91,7 +98,7 @@ fun UserRegisterContent(
   when {
     openAlertDialog.value -> {
       ConfirmDialog(
-        onConfirm = { /*TODO*/ },
+        onConfirm = { onRegisterClick() },
         onDismiss = { openAlertDialog.value = false }
       )
     }
@@ -235,7 +242,7 @@ fun UserRegisterContent(
   }
   val datePickerState = rememberDatePickerState()
   var selectedDate by remember {
-    mutableStateOf("")
+    mutableStateOf(registerDetails.birthDate)
   }
   if (showDatePickerDialog) {
     DatePickerDialog(
@@ -246,6 +253,7 @@ fun UserRegisterContent(
             datePickerState
               .selectedDateMillis?.let { millis ->
                 selectedDate = millis.toBrazilianDateFormat()
+                onRegisterInfoChange(registerDetails.copy(birthDate = selectedDate))
               }
             showDatePickerDialog = false
           }) {
@@ -276,27 +284,27 @@ fun UserRegisterContent(
         )
         
         InputField(
-          value = "",
-          onValueChange = {},
+          value = registerDetails.profileName,
+          onValueChange = {onRegisterInfoChange(registerDetails.copy(profileName = it))},
           label = "Nome do Perfil",
-          errorMessage = "",
+          errorMessage = if (registerDetails.errorMessages.profileName == -1) {""} else {stringResource(id = registerDetails.errorMessages.profileName)},
           aboutIcon = { AboutIconButton(onClick = { openProfileDialog.value = true }) },
           modifier = Modifier.fillMaxWidth()
         )
         
         InputField(
-          value = "",
-          onValueChange = {},
+          value = registerDetails.userName,
+          onValueChange = {onRegisterInfoChange(registerDetails.copy(userName = it))},
           label = "Usuário",
-          errorMessage = "",
+          errorMessage = if (registerDetails.errorMessages.userName == -1) {""} else {stringResource(id = registerDetails.errorMessages.userName)},
           modifier = Modifier.fillMaxWidth()
         )
         
         InputField(
-          value = "",
-          onValueChange = {},
+          value = registerDetails.password,
+          onValueChange = {onRegisterInfoChange(registerDetails.copy(password = it))},
           label = "Senha",
-          errorMessage = "",
+          errorMessage = if (registerDetails.errorMessages.password == -1) {""} else {stringResource(id = registerDetails.errorMessages.password)},
           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
           visualTransformation = PasswordVisualTransformation(),
           aboutIcon = { AboutIconButton(onClick = { openPasswordDialog.value = true }) },
@@ -304,8 +312,8 @@ fun UserRegisterContent(
         )
         
         InputField(
-          value = "",
-          onValueChange = {},
+          value = registerDetails.confirmPassword,
+          onValueChange = {onRegisterInfoChange(registerDetails.copy(confirmPassword = it))},
           label = "Confirmar a Senha",
           errorMessage = "",
           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -329,18 +337,18 @@ fun UserRegisterContent(
           }
           
           InputField(
-            value = "",
-            onValueChange = {},
+            value = registerDetails.name,
+            onValueChange = {onRegisterInfoChange(registerDetails.copy(name = it))},
             label = "Nome Completo",
-            errorMessage = "",
+            errorMessage = if (registerDetails.errorMessages.name == -1) {""} else {stringResource(id = registerDetails.errorMessages.name)},
             modifier = Modifier.fillMaxWidth()
           )
           
           InputField(
             value = selectedDate,
-            onValueChange = {},
+            onValueChange = {onRegisterInfoChange(registerDetails.copy(birthDate = it))},
             label = "Data de Nascimento",
-            errorMessage = "",
+            errorMessage = if (registerDetails.errorMessages.birthDate == -1) {""} else {stringResource(id = registerDetails.errorMessages.birthDate)},
             modifier = Modifier.fillMaxWidth(),
             onClick = {
               showDatePickerDialog = true
@@ -349,10 +357,10 @@ fun UserRegisterContent(
           )
           
           InputField(
-            value = "",
-            onValueChange = {},
+            value = registerDetails.email,
+            onValueChange = {onRegisterInfoChange(registerDetails.copy(email = it))},
             label = "Email",
-            errorMessage = "",
+            errorMessage = if (registerDetails.errorMessages.email == -1) {""} else {stringResource(id = registerDetails.errorMessages.email)},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth()
           )
