@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -40,7 +39,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -48,7 +46,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.arara.R
+import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.components.AboutIconButton
 import com.example.arara.ui.components.CustomDialog
 import com.example.arara.ui.components.InputField
@@ -63,10 +63,30 @@ object UserRegisterDestination: NavigationDestination {
   override val titleRes = R.string.user_register_title
 }
 
+@Composable
+fun RegisterScreen(
+  navigateToHome: () -> Unit,
+  modifier: Modifier = Modifier,
+  viewModel: UserRegisterViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+  val registerUiState = viewModel.registerUiState
+  
+  UserRegisterContent(
+    registerDetails = registerUiState.userRegisterDetails,
+    onRegisterInfoChange = viewModel::updateUiState,
+    onRegisterClick = { viewModel.register() },
+    modifier = modifier
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserRegisterContent() {
-  
+fun UserRegisterContent(
+  registerDetails: UserRegisterDetails,
+  onRegisterInfoChange: (UserRegisterDetails) -> Unit,
+  onRegisterClick: () -> Unit,
+  modifier: Modifier = Modifier
+) {
   val openAlertDialog = remember { mutableStateOf(false) }
   when {
     openAlertDialog.value -> {

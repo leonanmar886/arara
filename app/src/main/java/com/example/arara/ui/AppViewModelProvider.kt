@@ -6,11 +6,13 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.arara.AraraApplication
 import com.example.arara.ui.screens.login.LoginViewModel
+import com.example.arara.ui.screens.user.register.UserRegisterViewModel
 
 object AppViewModelProvider {
   val Factory = viewModelFactory {
     initializer {
       LoginViewModel()
+      UserRegisterViewModel()
     }
   }
 }
