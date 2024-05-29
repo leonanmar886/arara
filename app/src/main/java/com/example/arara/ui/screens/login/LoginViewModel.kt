@@ -4,9 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.arara.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import kotlinx.coroutines.launch
 
 data class ErrorMessages(
   val email: Int = -1,
@@ -56,27 +58,33 @@ class LoginViewModel: ViewModel() {
     loginUiState = LoginState(loginDetails = newLoginDetails, isLoginValid = isValid)
   }
   
-  fun checkUserLoggedIn() {
+  fun checkUserLoggedIn(): Boolean {
     if (auth.currentUser != null) {
       val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = true)
       loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+      return true
     }
+    return false
   }
   
   fun login() {
-    auth.signInWithEmailAndPassword(loginUiState.loginDetails.email, loginUiState.loginDetails.password)
-      .addOnCompleteListener { task ->
-        loginUiState = if (task.isSuccessful) {
-          LoginState(loginDetails = loginUiState.loginDetails.copy(isLoggedId = true), isLoginValid = true)
-        } else {
-          val exception = task.exception
-          if (exception is FirebaseAuthInvalidUserException) {
-            LoginState(loginDetails = loginUiState.loginDetails.copy(errorMessages = ErrorMessages(email = R.string.error_not_registered_email)), isLoginValid = false)
-          } else {
-            LoginState(loginDetails = loginUiState.loginDetails.copy(errorMessages = ErrorMessages(general = R.string.error_with_credentials)), isLoginValid = false)
-          }
+    if (!loginUiState.isLoginValid) {
+      return
+    }
+    
+    viewModelScope.launch {
+      auth.signInWithEmailAndPassword(loginUiState.loginDetails.email, loginUiState.loginDetails.password)
+        .addOnSuccessListener {
+          val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = true)
+          loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
         }
-      }
+        .addOnFailureListener {
+          val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(
+            errorMessages = ErrorMessages(general = R.string.error_with_credentials)
+          )
+          loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+        }
+    }
   }
   
   private fun isValidEmail(email: String): Boolean {

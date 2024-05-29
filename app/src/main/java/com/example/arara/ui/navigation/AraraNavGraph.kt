@@ -29,7 +29,7 @@ fun AraraNavHost(
       )
     }
     composable(UserRegisterDestination.route) {
-      RegisterScreen(navigateToHome = { /*TODO*/ })
+      RegisterScreen(navigateToHome = { navController.navigate(LoginDestination.route) })
     }
   }
 }

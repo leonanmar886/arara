@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -53,9 +54,7 @@ fun LoginScreen(
 ) {
   val loginUiState = viewModel.loginUiState
   
-  viewModel.checkUserLoggedIn()
-  
-  if(loginUiState.loginDetails.isLoggedId) {
+  if(viewModel.checkUserLoggedIn()) {
     navigateToHome()
   }
   
@@ -175,6 +174,15 @@ fun InputForm(
         .padding(16.dp, 4.dp, 16.dp, 4.dp)
     )
     
+    if (loginDetails.errorMessages.general != -1) {
+      Text(
+        text = stringResource(id = loginDetails.errorMessages.general),
+        color = Color.Red,
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+        style = MaterialTheme.typography.labelSmall,
+      )
+    }
+    
     Button(
       onClick = onLoginSubmit,
       colors = ButtonColors(
@@ -188,7 +196,6 @@ fun InputForm(
       Text(
         text = "Entrar",
         fontFamily = FontFamily(Font(R.font.quicksand)),
-
       )
     }
   }
