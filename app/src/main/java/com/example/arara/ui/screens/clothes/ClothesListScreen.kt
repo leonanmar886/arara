@@ -27,6 +27,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -61,34 +63,47 @@ fun ClothesListScreen(
         R.drawable.image3,
         R.drawable.image4,
         R.drawable.image5,
-        R.drawable.image6
+        R.drawable.image6,
+        R.drawable.image1,
+        R.drawable.image2
     )
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Logo(modifier = modifier)
         Row {
             Button(onClick = navigateToHome) {
-                Text(text = "Buscar")
+                Text(text = "Filtrar")
             }
         }
 
+        Text(
+            text = "Todas as roupas",
+            color = Color.Black,
+            fontSize = 20.sp,
+            fontFamily = FontFamily(Font(R.font.bubbler_one)),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 10.dp, bottom = 10.dp)
+        )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(16.dp, 8.dp)
+
         ) {
-            items(images) { imageRes ->
-                ImageCard(modifier = modifier, imageRes = imageRes)
+            items(images.size) { index ->
+                ImageCard(modifier = modifier, imageRes = images[index])
             }
         }
-        BottomAppBar(
-            content = { Text("Meu Rodapé") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-        )
+        Footer(modifier = Modifier)
     }
 }
 
+/*
 @Composable
 fun InputForm (
     clothesDetails: ClothesDetails,
@@ -104,6 +119,7 @@ fun InputForm (
             .padding(16.dp, 4.dp, 16.dp, 4.dp)
     )
 }
+*/
 
 @Composable
 fun ImageCard(
@@ -113,19 +129,23 @@ fun ImageCard(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .shadow(elevation = 1.dp, shape = RoundedCornerShape(12.dp), clip = true)
             .aspectRatio(1f)
             .padding(15.dp)
-            .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(12.dp))
-
+            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(12.dp))
     ) {
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Transparent)
+                //.clip(shape = RoundedCornerShape(12.dp)) não tá fazendo nada
         )
+        }
     }
-}
+
 
 @Composable
 fun Logo(
@@ -150,4 +170,54 @@ fun Logo(
             fontFamily = FontFamily(Font(R.font.bubbler_one))
         )
     }
+}
+
+@Composable
+fun Footer(
+    modifier: Modifier
+) {
+    BottomAppBar(
+        content = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Icone pessoas",
+                    modifier = Modifier
+                        .size(36.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.footer_division),
+                    contentDescription = "divisor do rodapé",
+                    modifier = Modifier
+                        .size(36.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.iconepessoas2),
+                    contentDescription = "Icone pessoas",
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.footer_division),
+                    contentDescription = "divisor do rodapé",
+                    modifier = Modifier
+                        .size(36.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.tresbarras),
+                    contentDescription = "Icone pessoas",
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(color = Color(0xFFFFFFFF))
+    )
 }
