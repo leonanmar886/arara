@@ -122,13 +122,13 @@ fun UserRegisterContent(
               fontWeight = FontWeight.W600,
               fontSize = 12.sp,
             )
-            Image(
+            /*Image(
               painter = painterResource(id = R.drawable.profile_dialog_image),
               contentDescription = "Perfil",
               modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
-            )
+            )*/
           }
         },
         onDismiss = { openProfileDialog.value = false }

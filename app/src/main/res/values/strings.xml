@@ -2,6 +2,9 @@
     <string name="app_name">Arara</string>
     <string name="login_title">Login</string>
     <string name="user_register_title">Cadastro de usuário</string>
+    <string name="clothes_title">Roupa</string>
+
+
 
     <string name="profile_dialog_description">É o nome que ficará visível para os outros usuários no seu Perfil. Não é o “arroba”, mas também não é seu nome completo.</string>
     <string name="password_dialog_description">A senha deve atender os seguintes requisitos:</string>
