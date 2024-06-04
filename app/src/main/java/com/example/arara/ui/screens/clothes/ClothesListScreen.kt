@@ -18,19 +18,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -77,6 +84,7 @@ fun ClothesListScreen(
             Button(onClick = navigateToHome) {
                 Text(text = "Filtrar")
             }
+            //inputform {todo}
         }
 
         Text(
@@ -86,13 +94,13 @@ fun ClothesListScreen(
             fontFamily = FontFamily(Font(R.font.bubbler_one)),
             modifier = modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, top = 10.dp, bottom = 10.dp)
+                .padding(start = 16.dp, top = 10.dp, bottom = 0.dp)
         )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier
                 .weight(1f)
-                .padding(16.dp, 8.dp)
+                .padding(16.dp, top = 0.dp, bottom = 8.dp)
 
         ) {
             items(images.size) { index ->
@@ -103,36 +111,28 @@ fun ClothesListScreen(
     }
 }
 
-/*
 @Composable
-fun InputForm (
-    clothesDetails: ClothesDetails,
-    onClothesInfoChange: (ClothesDetails) -> Unit
+fun InputForm(
+    modifier: Modifier = Modifier,
+    label: String,
+    onValueChanged: (String) -> Unit
 ) {
-    InputField(
-        value = clothesDetails.search,
-        onValueChange = { onClothesInfoChange(clothesDetails.copy(search = it)) },
-        label = "Buscar",
-        errorMessage = "",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp, 4.dp, 16.dp, 4.dp)
-    )
+
 }
-*/
 
 @Composable
 fun ImageCard(
     modifier: Modifier,
     imageRes: Int
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .shadow(elevation = 1.dp, shape = RoundedCornerShape(12.dp), clip = true)
-            .aspectRatio(1f)
-            .padding(15.dp)
-            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(12.dp))
+    Card(
+    modifier = Modifier
+        .background(color = Color.Transparent, shape = RoundedCornerShape(12.dp))
+        .padding(4.dp)
+        .aspectRatio(1f)
+        .padding(6.dp)
+        .shadow(15.dp, shape = RoundedCornerShape(12.dp))
+
     ) {
         Image(
             painter = painterResource(id = imageRes),
@@ -140,11 +140,11 @@ fun ImageCard(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Transparent)
-                //.clip(shape = RoundedCornerShape(12.dp)) não tá fazendo nada
+                .background(color = Color.White)
         )
-        }
     }
+
+}
 
 
 @Composable
