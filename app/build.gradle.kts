@@ -43,6 +43,7 @@ android {
 
 dependencies {
   
+  implementation(libs.cronet.embedded)
   // Compose dependencies
   val composeBom = platform("androidx.compose:compose-bom:2024.03.00")
   implementation(composeBom)
@@ -85,4 +86,8 @@ dependencies {
   implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
   
   implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+  // Retrofit HTTP Requisition
+  implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+  implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 }

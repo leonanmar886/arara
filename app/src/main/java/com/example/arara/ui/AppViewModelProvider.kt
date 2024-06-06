@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.arara.AraraApplication
-import com.example.arara.ui.screens.clothes.ClothesDetailsViewModel
 import com.example.arara.ui.screens.login.LoginViewModel
 import com.example.arara.ui.screens.user.register.UserRegisterViewModel
 import com.example.arara.ui.screens.clothes.ClothesViewModel
