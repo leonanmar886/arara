@@ -2,17 +2,16 @@ package com.example.arara.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.arara.ui.screens.clothes.ClothesDestination
+import com.example.arara.ui.screens.clothes.ClothesDetailsDestination
+import com.example.arara.ui.screens.clothes.ClothesDetailsScreen
 import com.example.arara.ui.screens.clothes.ClothesListScreen
-import com.example.arara.ui.screens.clothes.ClothesViewModel
 import com.example.arara.ui.screens.login.LoginDestination
 import com.example.arara.ui.screens.login.LoginScreen
 import com.example.arara.ui.screens.user.register.RegisterScreen
-import com.example.arara.ui.screens.user.register.UserRegisterContent
 import com.example.arara.ui.screens.user.register.UserRegisterDestination
 
 @Composable
@@ -36,8 +35,11 @@ fun AraraNavHost(
       RegisterScreen(navigateToHome = { navController.navigate(LoginDestination.route) })
     }
     composable(ClothesDestination.route) {
-      val viewModel: ClothesViewModel = viewModel()
-      ClothesListScreen(viewModel = viewModel, navigateToHome = { navController.navigate(LoginDestination.route) }, modifier = modifier)
+      ClothesListScreen(navigateToHome = { navController.navigate(LoginDestination.route) }, navigateToDetails = { navController.navigate(ClothesDetailsDestination.route) })
+    }
+    composable(ClothesDetailsDestination.route) {
+      ClothesDetailsScreen(navigateToHome = { navController.navigate(LoginDestination.route) })
     }
   }
 }
+

@@ -5,34 +5,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,24 +29,20 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.arara.R
 import com.example.arara.ui.AppViewModelProvider
-import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
-import com.example.arara.ui.screens.login.LoginViewModel
-import com.example.arara.ui.screens.clothes.Logo
-import com.example.arara.ui.screens.clothes.Footer
 
-/*
-object ClothesDestination: NavigationDestination {
-    override val route = "clothes"
-    override val titleRes = R.string.clothes_title
+
+object ClothesDetailsDestination: NavigationDestination {
+    override val route = "details"
+    override val titleRes = R.string.clothesdetails_title
 }
-*/
+
 
 @Composable
 fun ClothesDetailsScreen(
-    viewModel: ClothesViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToHome: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ClothesDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val clothesUiState = viewModel.clothesUiState
 
