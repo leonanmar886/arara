@@ -1,76 +1,88 @@
 package com.example.arara.data
+import com.example.arara.R
 import com.example.arara.models.Clothes
 
 
 val clothesList = listOf(
     Clothes(
-        name = "Camiseta Básica",
-        color = "Branca",
-        size = "M",
-        description = "Camiseta branca básica de algodão.",
-        tags = listOf("casual", "algodão", "básica")
-    ),
-    Clothes(
-        name = "Calça Jeans",
-        color = "Azul",
-        size = "42",
-        description = "Calça jeans azul escuro com corte reto.",
-        tags = listOf("jeans", "casual", "azul")
-    ),
-    Clothes(
-        name = "Vestido Floral",
-        color = "Rosa",
-        size = "G",
-        description = "Vestido floral rosa com detalhes em renda.",
-        tags = listOf("floral", "verão", "renda")
-    ),
-    Clothes(
-        name = "Jaqueta de Couro",
+        name = "Camiseta preta",
         color = "Preta",
-        size = "P",
-        description = "Jaqueta de couro preta com zíperes prateados.",
-        tags = listOf("inverno", "couro", "preta")
-    ),
-    Clothes(
-        name = "Blusa de Frio",
-        color = "Cinza",
-        size = "GG",
-        description = "Blusa de frio cinza com capuz e bolso frontal.",
-        tags = listOf("inverno", "capuz", "cinza")
-    ),
-    Clothes(
-        name = "Shorts de Praia",
-        color = "Vermelho",
         size = "M",
-        description = "Shorts de praia vermelho com elástico na cintura.",
-        tags = listOf("praia", "verão", "vermelho")
+        description = "Camiseta preta básica de algodão.",
+        tags = listOf("casual", "algodão", "básica"),
+        imageResId = R.drawable.camisetapreta
     ),
     Clothes(
-        name = "Saia Midi",
+        name = "Camiseta bege",
+        color = "Bege",
+        size = "42",
+        description = "Camiseta bege básica de algodão",
+        tags = listOf("algodão", "casual", "bege"),
+        imageResId = R.drawable.camisabege
+    ),
+    Clothes(
+        name = "Camiseta verde Palanca",
+        color = "Verde",
+        size = "G",
+        description = "Camiseta verde Palanca over",
+        tags = listOf("verde", "algodão", "Palanca"),
+        imageResId = R.drawable.camisaverde
+    ),
+    Clothes(
+        name = "Calça Bege",
+        color = "Bege",
+        size = "M",
+        description = "Calça bege de sarja com corte reto.",
+        tags = listOf("casual", "bege", "sarja"),
+        imageResId = R.drawable.calcabege
+    ),
+    Clothes(
+        name = "Camisa Seleção",
         color = "Amarela",
         size = "P",
-        description = "Saia midi amarela com pregas e cintura alta.",
-        tags = listOf("elegante", "verão", "amarela")
+        description = "Camisa da seleção brasileira com detalhes em verde.",
+        tags = listOf("esporte", "brasil", "amarela"),
+        imageResId = R.drawable.camisaselecao
     ),
     Clothes(
-        name = "Blazer",
-        color = "Azul Marinho",
-        size = "M",
-        description = "Blazer azul marinho com corte acinturado.",
-        tags = listOf("trabalho", "elegante", "azul")
-    ),
-    Clothes(
-        name = "Camisa Social",
-        color = "Branca",
+        name = "Tênis Branco",
+        color = "Branco",
         size = "G",
-        description = "Camisa social branca de manga longa.",
-        tags = listOf("trabalho", "formal", "branca")
+        description = "Tênis casual branco de couro sintético.",
+        tags = listOf("casual", "branco", "tênis"),
+        imageResId = R.drawable.tenis
     ),
     Clothes(
-        name = "Macacão",
-        color = "Preto",
+        name = "Vestido salmão",
+        color = "Salmão",
+        size = "P",
+        description = "Vestido alça fina salmão",
+        tags = listOf("vestido", "verão", "salmão"),
+        imageResId = R.drawable.image1
+    ),
+    Clothes(
+        name = "Vestido preto",
+        color = "preto",
         size = "M",
-        description = "Macacão preto com decote em V e cintura ajustada.",
-        tags = listOf("elegante", "preto", "decote")
+        description = "Vestido preto com decote em V",
+        tags = listOf("preto", "casual", "verão"),
+        imageResId = R.drawable.image2
+    ),
+    Clothes(
+        name = "Conjunto academia rosa",
+        color = "rosa",
+        size = "G",
+        description = "Conjunto academia rosa, top e short saia.",
+        tags = listOf("academia", "rosa", "short saia"),
+        imageResId = R.drawable.image3
+    ),
+    Clothes(
+        name = "Moletom verde",
+        color = "verde",
+        size = "G",
+        description = "Moletom verde",
+        tags = listOf("inverno", "preto", "moletom"),
+        imageResId = R.drawable.image4
     )
 )
+
