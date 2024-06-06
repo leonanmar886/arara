@@ -5,5 +5,6 @@ data class Clothes (
     val color: String,
     val size: String,
     val description: String,
-    val tags: List<String>
+    val tags: List<String>,
+    val imageResId: Int
 )

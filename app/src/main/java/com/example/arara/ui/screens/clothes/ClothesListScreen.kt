@@ -18,31 +18,44 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.arara.R
+import com.example.arara.data.clothesList
+import com.example.arara.models.Clothes
 import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
 import com.example.arara.ui.screens.login.LoginViewModel
+import java.time.format.TextStyle
 
 object ClothesDestination: NavigationDestination {
     override val route = "clothes"
@@ -55,96 +68,64 @@ fun ClothesListScreen(
     navigateToHome: () -> Unit,
     modifier: Modifier
 ) {
-    val clothesUiState = viewModel.clothesUiState
-
-    val images = listOf(
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6,
-        R.drawable.image1,
-        R.drawable.image2
-    )
+    //val clothesUiState = viewModel.clothesUiState
 
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
         Logo(modifier = modifier)
-        Row {
-            Button(onClick = navigateToHome) {
-                Text(text = "Filtrar")
-            }
-        }
-
-        Text(
-            text = "Todas as roupas",
-            color = Color.Black,
-            fontSize = 20.sp,
-            fontFamily = FontFamily(Font(R.font.bubbler_one)),
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, top = 10.dp, bottom = 10.dp)
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .weight(1f)
-                .padding(16.dp, 8.dp)
-
-        ) {
-            items(images.size) { index ->
-                ImageCard(modifier = modifier, imageRes = images[index])
-            }
-        }
-        Footer(modifier = Modifier)
-    }
-}
-
-/*
-@Composable
-fun InputForm (
-    clothesDetails: ClothesDetails,
-    onClothesInfoChange: (ClothesDetails) -> Unit
-) {
-    InputField(
-        value = clothesDetails.search,
-        onValueChange = { onClothesInfoChange(clothesDetails.copy(search = it)) },
-        label = "Buscar",
-        errorMessage = "",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp, 4.dp, 16.dp, 4.dp)
-    )
-}
-*/
-
-@Composable
-fun ImageCard(
-    modifier: Modifier,
-    imageRes: Int
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .shadow(elevation = 1.dp, shape = RoundedCornerShape(12.dp), clip = true)
-            .aspectRatio(1f)
-            .padding(15.dp)
-            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(12.dp))
-    ) {
-        Image(
-            painter = painterResource(id = imageRes),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Transparent)
-                //.clip(shape = RoundedCornerShape(12.dp)) não tá fazendo nada
-        )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+            ) {
+                InputForm(modifier = Modifier)
+                Image(
+                    painter = painterResource(id = R.drawable.lupa),
+                    contentDescription = "Lupa de busca",
+                    modifier = Modifier
+                        .size(50.dp)
+                )
+                Button(
+                    onClick = navigateToHome
+                ) {
+                    Text(
+                        text = "Filtrar",
+                        fontSize = 12.sp,
+                    )
+                }
+            }
+
+            Text(
+                text = "Todas as roupas",
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.bubbler_one)),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(start = 25.dp, top = 20.dp, end = 11.dp, bottom = 0.dp)
+            )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp, 0.dp)
+
+            ) {
+                items(clothesList) { clothes ->
+                    ImageCard(clothes = clothes, modifier = modifier)
+                }
+            }
+            Footer(modifier = Modifier)
         }
     }
+}
 
 
 @Composable
@@ -154,13 +135,13 @@ fun Logo(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(start = 10.dp,top = 16.dp)
+            .padding(start = 10.dp,top = 16.dp, bottom = 20.dp)
     ){
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
             modifier = Modifier
-                .size(40.dp)
+                .size(45.dp)
                 .fillMaxWidth()
         )
         Text(
@@ -172,14 +153,70 @@ fun Logo(
     }
 }
 
+
+@Composable
+fun InputForm(
+    modifier: Modifier = Modifier
+) {
+    var text by remember { mutableStateOf("") }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("") },
+            modifier = Modifier
+                .size(225.dp, 20.dp)
+        )
+}
+
+
+@Composable
+fun ImageCard(
+    clothes: Clothes,
+    modifier: Modifier
+) {
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Card(
+            modifier = Modifier
+                .background(color = Color.Transparent, shape = RoundedCornerShape(12.dp))
+                .padding(4.dp)
+                .aspectRatio(1f)
+                .padding(8.dp, 8.dp, 8.dp, 0.dp)
+                .shadow(15.dp, shape = RoundedCornerShape(12.dp))
+
+        ) {
+            Image(
+                painter = painterResource(id = clothes.imageResId),
+                contentDescription = clothes.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 8.dp)
+                    .background(color = Color.White)
+            )
+        }
+        Text(
+            text = "${clothes.name}",
+            fontFamily = FontFamily(Font(R.font.quicksand)),
+            textAlign = TextAlign.Center
+            )
+    }
+}
+
+
+
 @Composable
 fun Footer(
     modifier: Modifier
 ) {
     BottomAppBar(
+        containerColor = Color.White,
         content = {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -218,6 +255,5 @@ fun Footer(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(color = Color(0xFFFFFFFF))
     )
 }
