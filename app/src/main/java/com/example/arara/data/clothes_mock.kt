@@ -5,6 +5,7 @@ import com.example.arara.models.Clothes
 
 val clothesList = listOf(
     Clothes(
+        id = 1,
         name = "Camiseta preta",
         color = "Preta",
         size = "M",
@@ -13,6 +14,7 @@ val clothesList = listOf(
         imageResId = R.drawable.camisetapreta
     ),
     Clothes(
+        id = 2,
         name = "Camiseta bege",
         color = "Bege",
         size = "42",
@@ -21,6 +23,7 @@ val clothesList = listOf(
         imageResId = R.drawable.camisabege
     ),
     Clothes(
+        id = 3,
         name = "Camiseta verde Palanca",
         color = "Verde",
         size = "G",
@@ -29,6 +32,7 @@ val clothesList = listOf(
         imageResId = R.drawable.camisaverde
     ),
     Clothes(
+        id = 4,
         name = "Calça Bege",
         color = "Bege",
         size = "M",
@@ -37,6 +41,7 @@ val clothesList = listOf(
         imageResId = R.drawable.calcabege
     ),
     Clothes(
+        id = 5,
         name = "Camisa Seleção",
         color = "Amarela",
         size = "P",
@@ -45,6 +50,7 @@ val clothesList = listOf(
         imageResId = R.drawable.camisaselecao
     ),
     Clothes(
+        id = 6,
         name = "Tênis Branco",
         color = "Branco",
         size = "G",
@@ -53,6 +59,7 @@ val clothesList = listOf(
         imageResId = R.drawable.tenis
     ),
     Clothes(
+        id = 7,
         name = "Vestido salmão",
         color = "Salmão",
         size = "P",
@@ -61,6 +68,7 @@ val clothesList = listOf(
         imageResId = R.drawable.image1
     ),
     Clothes(
+        id = 8,
         name = "Vestido preto",
         color = "preto",
         size = "M",
@@ -69,6 +77,7 @@ val clothesList = listOf(
         imageResId = R.drawable.image2
     ),
     Clothes(
+        id = 9,
         name = "Conjunto academia rosa",
         color = "rosa",
         size = "G",
@@ -77,6 +86,7 @@ val clothesList = listOf(
         imageResId = R.drawable.image3
     ),
     Clothes(
+        id = 10,
         name = "Moletom verde",
         color = "verde",
         size = "G",
