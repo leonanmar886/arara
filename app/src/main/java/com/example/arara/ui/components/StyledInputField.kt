@@ -1,6 +1,7 @@
 package com.example.arara.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.arara.R
 
@@ -55,10 +57,11 @@ fun InputField(
         disabledLabelColor = Color.LightGray,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
-        unfocusedContainerColor = Color(0xFFCBCBCB).copy(alpha = "7A".toInt(16) / 255f)
+        unfocusedContainerColor = Color.White.copy(alpha = "7A".toInt(16) / 255f)
       ),
       trailingIcon = aboutIcon?.let { { aboutIcon() } },
-      modifier = modifier.onFocusEvent {if (it.isFocused) onClick() }
+      modifier = modifier
+        .onFocusEvent {if (it.isFocused) onClick() }
     )
     if(errorMessage.isNotEmpty()) {
       Text(

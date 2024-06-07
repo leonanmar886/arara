@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -42,6 +43,7 @@ import com.example.arara.R
 import com.example.arara.data.clothesList
 import com.example.arara.models.Clothes
 import com.example.arara.ui.AppViewModelProvider
+import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
 
 object ClothesDestination: NavigationDestination {
@@ -61,6 +63,7 @@ fun ClothesListScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = Color.White)
     ) {
         Logo(modifier = modifier)
         Column(
@@ -73,7 +76,19 @@ fun ClothesListScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
             ) {
-                InputForm(modifier = Modifier)
+                //InputForm(modifier = Modifier)
+                var text by remember { mutableStateOf("") }
+                InputField(
+                    value = text,
+                    onValueChange = { text = it },
+                    label = "Buscar",
+                    errorMessage = "",
+                    modifier = Modifier
+                        .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(10.dp))
+                        .width(189.dp)
+                        .height(40.dp)
+
+                )
                 Image(
                     painter = painterResource(id = R.drawable.lupa),
                     contentDescription = "Lupa de busca",
@@ -81,11 +96,13 @@ fun ClothesListScreen(
                         .size(50.dp)
                 )
                 Button(
-                    onClick = navigateToHome
+                    onClick = navigateToHome,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF00B8A9))
                 ) {
                     Text(
                         text = "FILTRAR",
-                        fontSize = 12.sp,
+                        fontSize = 12.sp
                     )
                 }
             }
@@ -143,21 +160,6 @@ fun Logo(
 
 
 @Composable
-fun InputForm(
-    modifier: Modifier = Modifier
-) {
-    var text by remember { mutableStateOf("") }
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("") },
-            modifier = Modifier
-                .size(225.dp, 20.dp)
-        )
-}
-
-
-@Composable
 fun ImageCard(
     clothes: Clothes,
     modifier: Modifier
@@ -168,8 +170,6 @@ fun ImageCard(
     ) {
         Card(
             modifier = Modifier
-                .background(color = Color.Magenta, shape = RoundedCornerShape(12.dp))
-              //  .aspectRatio(1f)
                 .shadow(15.dp, shape = RoundedCornerShape(12.dp))
                 .size(width = 150.dp, height = 150.dp)
 
