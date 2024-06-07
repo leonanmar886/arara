@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -83,7 +84,7 @@ fun ClothesListScreen(
                     onClick = navigateToHome
                 ) {
                     Text(
-                        text = "Filtrar",
+                        text = "FILTRAR",
                         fontSize = 12.sp,
                     )
                 }
@@ -93,10 +94,10 @@ fun ClothesListScreen(
                 text = "Todas as roupas",
                 color = Color.Black,
                 fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.bubbler_one)),
+                fontFamily = FontFamily(Font(R.font.quicksand)),
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(start = 25.dp, top = 20.dp, end = 11.dp, bottom = 0.dp)
+                    .padding(start = 28.dp, top = 10.dp, end = 11.dp, bottom = 10.dp)
             )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -167,11 +168,10 @@ fun ImageCard(
     ) {
         Card(
             modifier = Modifier
-                .background(color = Color.Transparent, shape = RoundedCornerShape(12.dp))
-                .padding(4.dp)
-                .aspectRatio(1f)
-                .padding(8.dp, 8.dp, 8.dp, 0.dp)
+                .background(color = Color.Magenta, shape = RoundedCornerShape(12.dp))
+              //  .aspectRatio(1f)
                 .shadow(15.dp, shape = RoundedCornerShape(12.dp))
+                .size(width = 150.dp, height = 150.dp)
 
         ) {
             Image(
@@ -179,15 +179,16 @@ fun ImageCard(
                 contentDescription = clothes.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 8.dp)
                     .background(color = Color.White)
+                    .fillMaxSize()
             )
         }
         Text(
             text = "${clothes.name}",
             fontFamily = FontFamily(Font(R.font.quicksand)),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(bottom = 8.dp)
             )
     }
 }
