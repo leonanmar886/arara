@@ -50,48 +50,52 @@ dependencies {
   val composeBom = platform("androidx.compose:compose-bom:2024.03.00")
   implementation(composeBom)
   androidTestImplementation(composeBom)
-  implementation("androidx.compose.material3:material3")
-  implementation("androidx.compose.ui:ui-tooling-preview")
-  debugImplementation("androidx.compose.ui:ui-tooling")
-  androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-  debugImplementation("androidx.compose.ui:ui-test-manifest")
-  implementation("androidx.compose.material:material-icons-core")
-  implementation("androidx.compose.material:material-icons-extended")
+  implementation(libs.material3)
+  implementation(libs.ui.tooling.preview)
+  debugImplementation(libs.ui.tooling)
+  androidTestImplementation(libs.ui.test.junit4)
+  debugImplementation(libs.ui.test.manifest)
+  implementation(libs.material.icons.core)
+  implementation(libs.material.icons.extended)
   implementation("androidx.compose.material3:material3-window-size-class")
-  implementation("androidx.activity:activity-compose:1.8.2")
-  implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-  implementation("androidx.compose.runtime:runtime-livedata")
-  implementation("androidx.compose.runtime:runtime-rxjava2")
+  implementation(libs.activity.compose)
+  implementation(libs.lifecycle.viewmodel.compose)
+  implementation(libs.runtime.livedata)
+  implementation(libs.runtime.rxjava2)
 
 // AndroidX dependencies
-  implementation("androidx.core:core-ktx:1.12.0")
-  implementation("androidx.appcompat:appcompat:1.6.1")
-  implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+  implementation(libs.core.ktx)
+  implementation(libs.appcompat)
+  implementation(libs.constraintlayout)
 
 // Material Design dependencies
-  implementation("com.google.android.material:material:1.11.0")
+  implementation(libs.material)
 
 // Firebase dependencies
-  implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
-  implementation("com.google.firebase:firebase-analytics")
-  implementation("com.google.firebase:firebase-auth-ktx")
-  implementation("com.google.android.gms:play-services-auth:20.7.0")
+  implementation(platform(libs.firebase.bom))
+  implementation(libs.firebase.analytics)
+  implementation(libs.firebase.auth.ktx)
+  implementation(libs.play.services.auth)
   
 // Testing dependencies
-  testImplementation("junit:junit:4.13.2")
-  androidTestImplementation("androidx.test.ext:junit:1.1.5")
-  androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+  testImplementation(libs.junit)
+  androidTestImplementation(libs.junit.ext)
+  androidTestImplementation(libs.espresso.core)
+  
+  
+//Coil
+  implementation(libs.coil.compose)
   
 // Navigation
   val nav_version = "2.7.7"
-  implementation("androidx.navigation:navigation-compose:$nav_version")
+  implementation(libs.nav.version)
   implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
   implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
   
   implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
   // Retrofit HTTP Requisition and Serialization
-  implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-  implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
+  implementation (libs.retrofit)
+  implementation (libs.converter.gson)
+  implementation(libs.kotlinx.serialization.json)
 }
