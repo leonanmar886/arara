@@ -44,6 +44,7 @@ android {
 dependencies {
   
   implementation(libs.cronet.embedded)
+  implementation(libs.firebase.firestore.ktx)
   // Compose dependencies
   val composeBom = platform("androidx.compose:compose-bom:2024.03.00")
   implementation(composeBom)
