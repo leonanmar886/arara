@@ -1,5 +1,6 @@
 package com.example.arara.ui.screens.clothes
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +16,15 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Toc
+import androidx.compose.material.icons.automirrored.sharp.HelpOutline
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -76,7 +82,8 @@ fun ClothesListScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
+                modifier = Modifier.fillMaxWidth()
+                    .padding(start = 25.dp, end = 25.dp)
             ) {
                 //InputForm(modifier = Modifier)
                 var text by remember { mutableStateOf("") }
@@ -85,17 +92,17 @@ fun ClothesListScreen(
                     onValueChange = { text = it },
                     label = "Buscar",
                     errorMessage = "",
+                    aboutIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "About",
+                        )
+                    },
                     modifier = Modifier
                         .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(10.dp))
-                        .width(189.dp)
+                        .width(200.dp)
                         .height(40.dp)
 
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.lupa),
-                    contentDescription = "Lupa de busca",
-                    modifier = Modifier
-                        .size(50.dp)
                 )
                 Button(
                     onClick = navigateToHome,
