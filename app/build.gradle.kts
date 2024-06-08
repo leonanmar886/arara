@@ -2,6 +2,7 @@ plugins {
   id("com.android.application")
   id("org.jetbrains.kotlin.android")
   id("com.google.gms.google-services")
+  id("kotlinx-serialization")
 }
 
 android {
@@ -75,8 +76,7 @@ dependencies {
   implementation("com.google.firebase:firebase-analytics")
   implementation("com.google.firebase:firebase-auth-ktx")
   implementation("com.google.android.gms:play-services-auth:20.7.0")
-
-
+  
 // Testing dependencies
   testImplementation("junit:junit:4.13.2")
   androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -90,7 +90,8 @@ dependencies {
   
   implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-  // Retrofit HTTP Requisition
+  // Retrofit HTTP Requisition and Serialization
   implementation ("com.squareup.retrofit2:retrofit:2.9.0")
   implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
 }
