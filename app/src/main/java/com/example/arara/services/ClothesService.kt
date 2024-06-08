@@ -5,6 +5,7 @@ import com.example.arara.models.ClotheCreationDTO
 import com.example.arara.models.Clothes
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
+import kotlinx.coroutines.tasks.await
 
 class ClothesService(
   private val clothesRepository: ClothesRepository,
@@ -17,16 +18,18 @@ class ClothesService(
     clothesRepository.add(item.toClothes(path))
   }
   
-  fun getAllClothes(): List<Clothes> {
-    var clothes: List<Clothes> = emptyList()
-    clothesRepository.getAll().addOnSuccessListener {
-      if (it != null && !it.isEmpty) {
-        clothes = it.toObjects(Clothes::class.java)
-      } else {
-        println("No documents found")
+  suspend fun getAllClothes(): List<Clothes> {
+    val snapshot = clothesRepository.getAll().await()
+    return if (!snapshot.isEmpty) {
+      val clothesList = snapshot.toObjects(Clothes::class.java)
+      for (clothes in clothesList) {
+        clothes.imageURI = cloudStorageService.getDownloadUrl(clothes.imageURI).toString()
       }
+      clothesList
+    } else {
+      println("No documents found")
+      emptyList()
     }
-    return clothes
   }
   
   fun getClothe(id: String): Clothes {

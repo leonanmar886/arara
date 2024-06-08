@@ -18,13 +18,13 @@ import retrofit2.http.Path
 
 interface ClothingApi {
     @PUT("clothing/{id}")
-    fun putClothing(@Path("id") id: Int, @Body clotheUpdate: Clothes): Call<Clothes>
+    fun putClothing(@Path("id") id: String, @Body clotheUpdate: Clothes): Call<Clothes>
 
     @DELETE("clothing/{id}")
-    fun deleteClothing(@Path("id") id: Int): Call<Clothes>
+    fun deleteClothing(@Path("id") id: String): Call<Clothes>
 
     @GET("clothing/{id}")
-    fun getClothingByID(@Path("id") id: Int): Call<Clothes>
+    fun getClothingByID(@Path("id") id: String): Call<Clothes>
 }
 
 val api: ClothingApi = Retrofit.Builder()
@@ -55,7 +55,7 @@ fun updateClothing(clothes: Clothes) {
     }
 }
 
-fun deleteClothing(id: Int) {
+fun deleteClothing(id: String) {
     clothingExists(id) { exists ->
         if (exists) {
             val call = api.deleteClothing(id)
@@ -78,7 +78,7 @@ fun deleteClothing(id: Int) {
     }
 }
 
-fun clothingExists(id: Int, onResult: (Boolean) -> Unit) {
+fun clothingExists(id: String, onResult: (Boolean) -> Unit) {
     val call = api.getClothingByID(id)
 
     call.enqueue(object : Callback<Clothes> {
@@ -91,6 +91,12 @@ fun clothingExists(id: Int, onResult: (Boolean) -> Unit) {
         }
     })
 }
+
+data class ClothesState(
+    val clothes: List<Clothes> = emptyList(),
+    val isLoading: Boolean = false,
+    val error: String = ""
+)
 
 class ClothesDetailsViewModel : ViewModel() {
 

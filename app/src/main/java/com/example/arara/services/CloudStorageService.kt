@@ -3,6 +3,7 @@ package com.example.arara.services
 import android.net.Uri
 import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 import java.io.File
 
 class CloudStorageService {
@@ -18,14 +19,8 @@ class CloudStorageService {
     }
   }
   
-  fun downloadImage(path: String){
+  suspend fun getDownloadUrl(path: String): Uri {
     val imageRef = storageRef.child(path)
-    val localFile = File.createTempFile("images", "jpg")
-    
-    imageRef.getFile(localFile).addOnSuccessListener {
-      println("Image downloaded")
-    }.addOnFailureListener{
-      println(it.message)
-    }
+    return imageRef.downloadUrl.await().normalizeScheme()
   }
 }

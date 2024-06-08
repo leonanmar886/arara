@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,8 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.arara.R
-import com.example.arara.data.clothesList
 import com.example.arara.models.Clothes
 import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.components.InputField
@@ -54,9 +57,10 @@ fun ClothesListScreen(
     navigateToHome: () -> Unit,
     navigateToDetails: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ClothesViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: ClothesListViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
-    //val clothesUiState = viewModel.clothesUiState
+    val clothesUiState = viewModel.clothesUiState
+    val clothesList = clothesUiState.clothes
 
     Column(
         modifier = Modifier
@@ -122,7 +126,7 @@ fun ClothesListScreen(
 
             ) {
                 items(clothesList) { clothes ->
-                    ImageCard(clothes = clothes, modifier = modifier)
+                    ImageCard(clothes = clothes, modifier = modifier, viewModel = viewModel)
                 }
             }
             Footer(modifier = Modifier)
@@ -160,23 +164,32 @@ fun Logo(
 @Composable
 fun ImageCard(
     clothes: Clothes,
-    modifier: Modifier
+    modifier: Modifier,
+    viewModel: ClothesListViewModel
 ) {
+    val context = LocalContext.current
+    val imageLoader = remember(context) { ImageLoader(context) }
+    val request = remember(clothes.imageURI) {
+        ImageRequest.Builder(context)
+            .data(clothes.imageURI)
+            .build()
+    }
+    
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .shadow(15.dp, shape = RoundedCornerShape(12.dp))
                 .size(width = 150.dp, height = 150.dp)
-
         ) {
-            Image(
-                painter = painterResource(id = clothes.imageResId),
+            AsyncImage(
+                model = request,
+                imageLoader = imageLoader,
                 contentDescription = clothes.name,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
+                modifier = modifier
                     .background(color = Color.White)
                     .fillMaxSize()
             )
@@ -185,7 +198,7 @@ fun ImageCard(
             text = clothes.name,
             fontFamily = FontFamily(Font(R.font.quicksand)),
             textAlign = TextAlign.Center,
-            modifier = Modifier
+            modifier = modifier
                 .padding(bottom = 8.dp)
             )
     }

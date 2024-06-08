@@ -20,4 +20,6 @@
     <string name="error_invalid_birth_date_format">O campo de data de nascimento não pode estar vazio</string>
     <string name="error_invalid_user_name_format">O campo de nome do usuário não pode estar vazio</string>
     <string name="error_passwords_do_not_match">As senhas não coincidem</string>
+
+    <string name="error_clothes_list">Erro ao recuperar as roupas cadastradas</string>
 </resources>

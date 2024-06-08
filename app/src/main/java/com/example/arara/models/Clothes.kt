@@ -11,5 +11,15 @@ data class Clothes (
     val size: String,
     val description: String,
     val tags: List<String>,
-    val imageURI: String
-)
+    var imageURI: String
+) {
+    constructor() : this(
+        id = "",
+        name = "",
+        color = "",
+        size = "",
+        description = "",
+        tags = emptyList(),
+        imageURI = ""
+    )
+}
