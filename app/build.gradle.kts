@@ -76,6 +76,7 @@ dependencies {
   implementation(libs.firebase.analytics)
   implementation(libs.firebase.auth.ktx)
   implementation(libs.play.services.auth)
+  implementation(libs.firebase.storage)
   
 // Testing dependencies
   testImplementation(libs.junit)

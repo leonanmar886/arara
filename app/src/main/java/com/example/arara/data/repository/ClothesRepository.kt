@@ -16,25 +16,24 @@ class ClothesRepository: FirestoreRepository<Clothes> {
   }
   
   override fun add(item: Clothes): Task<Void> {
-    return clothesCollection.document(item.id.toString()).set(item)
+    return clothesCollection.document(item.id).set(item)
   }
   
   override fun update(item: Clothes): Task<Void> {
-    return clothesCollection.document(item.id.toString()).set(item)
+    return clothesCollection.document(item.id).set(item)
   }
   
   override fun delete(item: Clothes): Task<Void> {
-    return clothesCollection.document(item.id.toString()).delete()
+    return clothesCollection.document(item.id).delete()
   }
   
   fun getAll(): Task<QuerySnapshot> {
     return clothesCollection.get()
   }
   
-  fun searchByName(name: String): Task<QuerySnapshot> {
-    return clothesCollection.whereEqualTo("name", name).get()
+  fun searchByTags(tags: List<String>): Task<QuerySnapshot> {
+    return clothesCollection.whereArrayContainsAny("tags", tags).get()
   }
-  
   
   
 }
