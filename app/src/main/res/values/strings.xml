@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">Arara</string>
     <string name="login_title">Login</string>
+    <string name="user_register_title">Cadastro de usuário</string>
+    <string name="clothes_title">Roupa</string>
+    <string name="clothesdetails_title">Detalhes</string>
+
+
+    <string name="profile_dialog_description">É o nome que ficará visível para os outros usuários no seu Perfil. Não é o “arroba”, mas também não é seu nome completo.</string>
+    <string name="password_dialog_description">A senha deve atender os seguintes requisitos:</string>
+    <string name="data_dialog_description">Seus dados são muito importantes para nós. São usados para fins de segurança e verificação de identidade. Isso  ajuda a proteger a sua conta contra algum acesso não autorizado e verificação de identidade.</string>
+
+    <string name="error_invalid_email_format">Formato de email inválido</string>
+    <string name="error_not_registered_email">Email não cadastrado. Por favor, cadastre-se na plataforma.</string>
+    <string name="error_invalid_password_format">A senha deve ter no mínimo 6 caracteres</string>
+    <string name="error_with_credentials">Erro ao fazer login. Verifique suas credenciais e tente novamente.</string>
+    <string name="error_invalid_name_format">O campo de nome não pode estar vazio</string>
+    <string name="error_register_failed">Erro ao cadastrar usuário. Tente novamente mais tarde.</string>
+    <string name="error_invalid_profile_name_format">O campo de nome de perfil não pode estar vazio</string>
+    <string name="error_invalid_birth_date_format">O campo de data de nascimento não pode estar vazio</string>
+    <string name="error_invalid_user_name_format">O campo de nome do usuário não pode estar vazio</string>
+    <string name="error_passwords_do_not_match">As senhas não coincidem</string>
+
+    <string name="error_clothes_list">Erro ao recuperar as roupas cadastradas</string>
 </resources>

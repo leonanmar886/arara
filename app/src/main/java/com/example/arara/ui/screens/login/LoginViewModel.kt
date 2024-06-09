@@ -1,52 +1,89 @@
 package com.example.arara.ui.screens.login
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.arara.R
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-data class LoginState(
+data class ErrorMessages(
+  val email: Int = -1,
+  val password: Int = -1,
+  val general: Int = -1
+)
+
+data class LoginDetails(
   val email: String = "",
   val password: String = "",
   val isLoading: Boolean = false,
   val isLoggedId: Boolean = false,
-  val errorMessage: String = ""
+  val errorMessages: ErrorMessages = ErrorMessages()
 )
+
+data class LoginState(
+  val loginDetails: LoginDetails = LoginDetails(),
+  val isLoginValid: Boolean = false
+)
+
 class LoginViewModel: ViewModel() {
-  private val _uiState = MutableStateFlow(LoginState())
-  private lateinit var auth: FirebaseAuth
+  private var auth: FirebaseAuth = FirebaseAuth.getInstance()
   
-  val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
+  var loginUiState by mutableStateOf(LoginState())
+    private set
   
-  fun onPasswordChanged(password: String) {
-    _uiState.value = _uiState.value.copy(password = password)
-  }
-  
-  fun onEmailChanged(email: String) {
-    if (isValidEmail(email)) {
-      _uiState.value = _uiState.value.copy(email = email)
-    } else {
-      _uiState.value = _uiState.value.copy(errorMessage = "Invalid email format")
+  private fun validateInput(uiState: LoginDetails): Pair<Boolean, LoginDetails> {
+    var isValid = true
+    var newErrorMessages = ErrorMessages()
+    
+    if (uiState.email.isNotBlank() && !isValidEmail(uiState.email)) {
+      newErrorMessages = newErrorMessages.copy(email = R.string.error_invalid_email_format)
+      isValid = false
     }
+    
+    if (uiState.password.isNotBlank() && uiState.password.length < 6) {
+      newErrorMessages = newErrorMessages.copy(password = R.string.error_invalid_password_format)
+      isValid = false
+    }
+    
+    val newLoginDetails = uiState.copy(errorMessages = newErrorMessages)
+    return Pair(isValid, newLoginDetails)
   }
   
-  fun checkUserLoggedIn() {
-    auth = FirebaseAuth.getInstance()
+  fun updateUiState(loginDetails: LoginDetails) {
+    val (isValid, newLoginDetails) = validateInput(loginDetails)
+    loginUiState = LoginState(loginDetails = newLoginDetails, isLoginValid = isValid)
+  }
+  
+  fun checkUserLoggedIn(): Boolean {
     if (auth.currentUser != null) {
-      _uiState.value = _uiState.value.copy(isLoggedId = true)
+      val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = true)
+      loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+      return true
     }
+    return false
   }
   
   fun login() {
-    auth.signInWithEmailAndPassword(_uiState.value.email, _uiState.value.password)
-      .addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          _uiState.value = _uiState.value.copy(isLoggedId = true)
-        } else {
-          _uiState.value = _uiState.value.copy(errorMessage = "Login failed")
+    if (!loginUiState.isLoginValid) {
+      return
+    }
+    
+    viewModelScope.launch {
+      auth.signInWithEmailAndPassword(loginUiState.loginDetails.email, loginUiState.loginDetails.password)
+        .addOnSuccessListener {
+          val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = true)
+          loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
         }
-      }
+        .addOnFailureListener {
+          val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(
+            errorMessages = ErrorMessages(general = R.string.error_with_credentials)
+          )
+          loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+        }
+    }
   }
   
   private fun isValidEmail(email: String): Boolean {
