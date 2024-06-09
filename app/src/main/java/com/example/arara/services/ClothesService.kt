@@ -1,10 +1,8 @@
 package com.example.arara.services
 
 import com.example.arara.data.repository.ClothesRepository
-import com.example.arara.models.ClotheCreationDTO
+import com.example.arara.models.dto.ClotheCreationDTO
 import com.example.arara.models.Clothes
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.tasks.await
 
 class ClothesService(

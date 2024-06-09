@@ -1,6 +1,7 @@
-package com.example.arara.models
+package com.example.arara.models.dto
 
 import android.net.Uri
+import com.example.arara.models.Clothes
 import java.util.UUID
 
 data class ClotheCreationDTO(
