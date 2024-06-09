@@ -27,8 +27,8 @@ class ClothesRepository: FirestoreRepository<Clothes> {
     return clothesCollection.document(item.id).delete()
   }
   
-  fun getAll(): Task<QuerySnapshot> {
-    return clothesCollection.get()
+  fun getAll(profileId: String): Task<QuerySnapshot> {
+    return clothesCollection.whereEqualTo("profile_id", profileId).get()
   }
   
   fun searchByTags(tags: List<String>): Task<QuerySnapshot> {

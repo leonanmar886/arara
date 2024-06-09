@@ -23,7 +23,8 @@ object AppViewModelProvider {
       ClothesListViewModel(
         ClothesService(
           clothesRepository = araraApplication().container.clothesRepository,
-          cloudStorageService = araraApplication().container.cloudStorageService
+          cloudStorageService = araraApplication().container.cloudStorageService,
+          profileService = araraApplication().container.profileService,
         )
       )
     }

@@ -7,9 +7,10 @@ import kotlinx.coroutines.tasks.await
 
 class ClothesService(
   private val clothesRepository: ClothesRepository,
-  private val cloudStorageService: CloudStorageService
+  private val cloudStorageService: CloudStorageService,
+  private val profileService: ProfileService
 ) {
-  fun addClothe(item: ClotheCreationDTO): Unit {
+  fun addClothe(item: ClotheCreationDTO) {
     val path = "clothes_images/${item.imageURI.lastPathSegment}"
     cloudStorageService.uploadImage(item.imageURI, path)
     
@@ -17,16 +18,13 @@ class ClothesService(
   }
   
   suspend fun getAllClothes(): List<Clothes> {
-    val snapshot = clothesRepository.getAll().await()
-    return if (!snapshot.isEmpty) {
-      val clothesList = snapshot.toObjects(Clothes::class.java)
-      for (clothes in clothesList) {
-        clothes.imageURI = cloudStorageService.getDownloadUrl(clothes.imageURI).toString()
+    val profileLogged = profileService.getLoggedProfile() ?: return emptyList()
+    val snapshot = clothesRepository.getAll(profileLogged.id).await()
+    
+    return snapshot.toObjects(Clothes::class.java).mapNotNull { clothes ->
+      clothes?.apply {
+        imageURI = cloudStorageService.getDownloadUrl(imageURI).toString()
       }
-      clothesList
-    } else {
-      println("No documents found")
-      emptyList()
     }
   }
   
@@ -44,11 +42,11 @@ class ClothesService(
     return clothes!!
   }
   
-  fun updateClothe(item: Clothes): Unit {
+  fun updateClothe(item: Clothes) {
     clothesRepository.update(item)
   }
   
-  fun deleteClothe(item: Clothes): Unit {
+  fun deleteClothe(item: Clothes) {
     clothesRepository.delete(item)
   }
   
