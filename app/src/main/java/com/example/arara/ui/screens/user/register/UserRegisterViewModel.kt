@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-data class ErrorMessages(
+data class UserRegisterErrorMessages(
   val email: Int = -1,
   val password: Int = -1,
   val name: Int = -1,
@@ -30,7 +30,7 @@ data class UserRegisterDetails(
   val birthDate: String = "",
   val isLoading: Boolean = false,
   val isRegistered: Boolean = false,
-  val errorMessages: ErrorMessages = ErrorMessages()
+  val errorMessages: UserRegisterErrorMessages = UserRegisterErrorMessages()
 )
 
 data class UserRegisterState(
@@ -46,7 +46,7 @@ class UserRegisterViewModel: ViewModel() {
   
   private fun validateInput(uiState: UserRegisterDetails): Pair<Boolean, UserRegisterDetails> {
     var isValid = true
-    var newErrorMessages = ErrorMessages()
+    var newErrorMessages = UserRegisterErrorMessages()
     
     if (uiState.email.isNotBlank() && !isValidEmail(uiState.email)) {
       newErrorMessages = newErrorMessages.copy(email = R.string.error_invalid_email_format)
@@ -110,14 +110,14 @@ class UserRegisterViewModel: ViewModel() {
         } else {
           UserRegisterState(
             userRegisterDetails = registerUiState.userRegisterDetails.copy(
-              errorMessages = ErrorMessages(general = R.string.error_register_failed)
+              errorMessages = UserRegisterErrorMessages(general = R.string.error_register_failed)
             )
           )
         }
       } catch (e: Exception) {
         UserRegisterState(
           userRegisterDetails = registerUiState.userRegisterDetails.copy(
-            errorMessages = ErrorMessages(general = R.string.error_register_failed)
+            errorMessages = UserRegisterErrorMessages(general = R.string.error_register_failed)
           )
         )
       }

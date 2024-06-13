@@ -10,7 +10,7 @@ import com.example.arara.models.Clothes
 import com.example.arara.services.ClothesService
 import kotlinx.coroutines.launch
 
-data class ErrorMessages(
+data class ClothesListErrorMessages(
     val search: Int = -1,
     val listClothes: Int = -1,
     val general: Int = -1
@@ -19,7 +19,7 @@ data class ErrorMessages(
 data class ClothesDetails(
     val search: String = "",
     val clothes: List<Clothes> = emptyList(),
-    val errorMessages: ErrorMessages = ErrorMessages()
+    val errorMessages: ClothesListErrorMessages = ClothesListErrorMessages()
 )
 
 class ClothesListViewModel(private val clothesService: ClothesService) : ViewModel() {
@@ -36,7 +36,7 @@ class ClothesListViewModel(private val clothesService: ClothesService) : ViewMod
             clothesUiState = try {
                 ClothesDetails(clothes = clothesService.getAllClothes())
             } catch (e: Exception) {
-                ClothesDetails(errorMessages = ErrorMessages(listClothes = R.string.error_clothes_list))
+                ClothesDetails(errorMessages = ClothesListErrorMessages(listClothes = R.string.error_clothes_list))
             }
         }
     }

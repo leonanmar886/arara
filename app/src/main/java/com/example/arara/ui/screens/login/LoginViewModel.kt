@@ -9,7 +9,7 @@ import com.example.arara.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
-data class ErrorMessages(
+data class LoginErrorMessages(
   val email: Int = -1,
   val password: Int = -1,
   val general: Int = -1
@@ -20,7 +20,7 @@ data class LoginDetails(
   val password: String = "",
   val isLoading: Boolean = false,
   val isLoggedId: Boolean = false,
-  val errorMessages: ErrorMessages = ErrorMessages()
+  val errorMessages: LoginErrorMessages = LoginErrorMessages()
 )
 
 data class LoginState(
@@ -36,7 +36,7 @@ class LoginViewModel: ViewModel() {
   
   private fun validateInput(uiState: LoginDetails): Pair<Boolean, LoginDetails> {
     var isValid = true
-    var newErrorMessages = ErrorMessages()
+    var newErrorMessages = LoginErrorMessages()
     
     if (uiState.email.isNotBlank() && !isValidEmail(uiState.email)) {
       newErrorMessages = newErrorMessages.copy(email = R.string.error_invalid_email_format)
@@ -79,7 +79,7 @@ class LoginViewModel: ViewModel() {
         }
         .addOnFailureListener {
           val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(
-            errorMessages = ErrorMessages(general = R.string.error_with_credentials)
+            errorMessages = LoginErrorMessages(general = R.string.error_with_credentials)
           )
           loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
         }
