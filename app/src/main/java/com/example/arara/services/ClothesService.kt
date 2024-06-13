@@ -10,11 +10,11 @@ class ClothesService(
   private val cloudStorageService: CloudStorageService,
   private val profileService: ProfileService
 ) {
-  fun addClothe(item: ClotheCreationDTO) {
+  suspend fun addClothe(item: ClotheCreationDTO) {
     val path = "clothes_images/${item.imageURI.lastPathSegment}"
     cloudStorageService.uploadImage(item.imageURI, path)
     
-    clothesRepository.add(item.toClothes(path))
+    clothesRepository.add(item.toClothes(path)).await()
   }
   
   suspend fun getAllClothes(): List<Clothes> {
