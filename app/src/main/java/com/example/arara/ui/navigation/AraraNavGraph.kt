@@ -19,12 +19,12 @@ fun AraraNavHost(
 ) {
   NavHost(
     navController = navController,
-    startDestination = ClothesDestination.route,
+    startDestination = LoginDestination.route,
     modifier = modifier
   ) {
     composable(LoginDestination.route) {
       LoginScreen(
-        navigateToHome = { /*TODO*/ },
+        navigateToHome = { navController.navigate(ClothesDestination.route) },
         navigateToUserRegister = { navController.navigate(UserRegisterDestination.route) },
         navigateToLoginGoogle = { /*TODO*/ }
       )

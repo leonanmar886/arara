@@ -1,5 +1,6 @@
 package com.example.arara.ui.screens.clothes
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -38,6 +39,7 @@ class ClothesListViewModel(private val clothesService: ClothesService) : ViewMod
             } catch (e: Exception) {
                 ClothesDetails(errorMessages = ClothesListErrorMessages(listClothes = R.string.error_clothes_list))
             }
+            Log.d("ClothesListViewModel", "Clothes: ${clothesUiState.clothes}")
         }
     }
 

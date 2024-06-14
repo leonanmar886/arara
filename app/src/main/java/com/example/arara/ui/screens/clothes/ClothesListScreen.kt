@@ -1,6 +1,5 @@
 package com.example.arara.ui.screens.clothes
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +16,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Toc
-import androidx.compose.material.icons.automirrored.sharp.HelpOutline
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -49,6 +46,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.arara.R
 import com.example.arara.models.Clothes
+import com.example.arara.services.ImageService
 import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
@@ -67,6 +65,7 @@ fun ClothesListScreen(
 ) {
     val clothesUiState = viewModel.clothesUiState
     val clothesList = clothesUiState.clothes
+    val imageService = ImageService(LocalContext.current)
 
     Column(
         modifier = Modifier
@@ -105,7 +104,9 @@ fun ClothesListScreen(
 
                 )
                 Button(
-                    onClick = navigateToHome,
+                    onClick = {
+                        imageService.getImageFromGallery()
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF00B8A9))
                 ) {
