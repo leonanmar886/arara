@@ -4,6 +4,7 @@
     <string name="user_register_title">Cadastro de usuário</string>
     <string name="clothes_title">Roupa</string>
     <string name="clothesdetails_title">Detalhes</string>
+    <string name="clothes_register_title">Cadastro de roupa</string>
 
 
     <string name="profile_dialog_description">É o nome que ficará visível para os outros usuários no seu Perfil. Não é o “arroba”, mas também não é seu nome completo.</string>

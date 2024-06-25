@@ -20,6 +20,7 @@ ui-test-manifest = "1.6.7"
 material-icons-core = "1.6.7"
 material-icons-extended = "1.6.7"
 activity-compose = "1.9.0"
+activity-ktx = "1.2.0"
 lifecycle-viewmodel-compose = "2.8.1"
 runtime-livedata = "1.6.7"
 runtime-rxjava2 = "1.6.7"
@@ -57,11 +58,8 @@ androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
-firebase-bom-v3280 = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom-version" }
 google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 google-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
-material-v1110 = { module = "com.google.android.material:material", version.ref = "material-version" }
-my-library = { group = "com.myapplication", name = "mylibrary", version.ref = "my-library" }
 cronet-embedded = { group = "org.chromium.net", name = "cronet-embedded", version.ref = "cronet-embedded" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebase-firestore-ktx" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
@@ -74,6 +72,7 @@ ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", v
 material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "material-icons-core" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity-ktx" }
 lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
 runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtime-livedata" }
 runtime-rxjava2 = { group = "androidx.compose.runtime", name = "runtime-rxjava2", version.ref = "runtime-rxjava2" }

@@ -1,5 +1,11 @@
 package com.example.arara.ui.screens.clothes
 
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,11 +23,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.AddBox
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,8 +54,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.arara.R
 import com.example.arara.models.Clothes
-import com.example.arara.services.ImageService
 import com.example.arara.ui.AppViewModelProvider
+import com.example.arara.ui.activities.ImageSelectionActivity
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
 
@@ -58,15 +66,14 @@ object ClothesDestination: NavigationDestination {
 
 @Composable
 fun ClothesListScreen(
-    navigateToHome: () -> Unit,
     navigateToDetails: () -> Unit,
+    navigateToRegister: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClothesListViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val clothesUiState = viewModel.clothesUiState
     val clothesList = clothesUiState.clothes
-    val imageService = ImageService(LocalContext.current)
-
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -81,7 +88,8 @@ fun ClothesListScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 25.dp, end = 25.dp)
             ) {
                 //InputForm(modifier = Modifier)
@@ -104,17 +112,24 @@ fun ClothesListScreen(
 
                 )
                 Button(
-                    onClick = {
-                        imageService.getImageFromGallery()
-                    },
+                    onClick = {},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF00B8A9))
                 ) {
                     Text(
-                        text = "FILTRAR",
+                        text = "BUSCAR",
                         fontSize = 12.sp
                     )
                 }
+                IconButton(
+                    onClick = { navigateToRegister() },
+                    content = {
+                        Icon(
+                            imageVector = Icons.Outlined.AddBox,
+                            contentDescription = "Buscar"
+                        )
+                    }
+                )
             }
 
             Text(

@@ -67,6 +67,7 @@ dependencies {
   implementation(libs.core.ktx)
   implementation(libs.appcompat)
   implementation(libs.constraintlayout)
+  implementation(libs.activity.ktx)
 
 // Material Design dependencies
   implementation(libs.material)

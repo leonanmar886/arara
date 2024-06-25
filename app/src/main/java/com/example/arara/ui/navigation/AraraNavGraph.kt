@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.arara.ui.screens.clothes.ClothesDestination
 import com.example.arara.ui.screens.clothes.ClothesListScreen
+import com.example.arara.ui.screens.clothes.ClothesRegisterDestination
+import com.example.arara.ui.screens.clothes.ClothesRegisterScreen
 import com.example.arara.ui.screens.login.LoginDestination
 import com.example.arara.ui.screens.login.LoginScreen
 import com.example.arara.ui.screens.user.register.RegisterScreen
@@ -33,7 +35,11 @@ fun AraraNavHost(
       RegisterScreen(navigateToHome = { navController.navigate(LoginDestination.route) })
     }
     composable(ClothesDestination.route) {
-      ClothesListScreen(navigateToHome = { navController.navigate(LoginDestination.route) }, navigateToDetails = {  })
+      ClothesListScreen(navigateToDetails = {  }, navigateToRegister = { navController.navigate(ClothesRegisterDestination.route) })
+    }
+    
+    composable(ClothesRegisterDestination.route){
+      ClothesRegisterScreen(navigateToList = { navController.navigate(ClothesDestination.route) })
     }
 //    composable(ClothesDetailsDestination.route) {
 //      ClothesDetailsScreen(navigateToHome = { navController.navigate(LoginDestination.route) })

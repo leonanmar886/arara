@@ -3,16 +3,24 @@ package com.example.arara.services
 import com.example.arara.data.repository.ClothesRepository
 import com.example.arara.models.dto.ClotheCreationDTO
 import com.example.arara.models.Clothes
+import com.example.arara.models.Tag
 import kotlinx.coroutines.tasks.await
 
-class ClothesService(
+open class ClothesService(
   private val clothesRepository: ClothesRepository,
   private val cloudStorageService: CloudStorageService,
+  private val tagsService: TagsService,
   private val profileService: ProfileService
 ) {
-  suspend fun addClothe(item: ClotheCreationDTO) {
+  suspend fun addClothe(item: ClotheCreationDTO, presentTags: List<String>) {
     val path = "clothes_images/${item.imageURI.lastPathSegment}"
     cloudStorageService.uploadImage(item.imageURI, path)
+    
+    item.tags.forEach { tag ->
+      if (!presentTags.contains(tag)) {
+        tagsService.addTag(Tag(name = tag)).await()
+      }
+    }
     
     clothesRepository.add(item.toClothes(path)).await()
   }

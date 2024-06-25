@@ -10,6 +10,7 @@ import com.example.arara.ui.screens.clothes.ClothesDetailsViewModel
 import com.example.arara.ui.screens.login.LoginViewModel
 import com.example.arara.ui.screens.user.register.UserRegisterViewModel
 import com.example.arara.ui.screens.clothes.ClothesListViewModel
+import com.example.arara.ui.screens.clothes.ClothesRegisterViewModel
 
 object AppViewModelProvider {
   val Factory = viewModelFactory {
@@ -24,12 +25,25 @@ object AppViewModelProvider {
         ClothesService(
           clothesRepository = araraApplication().container.clothesRepository,
           cloudStorageService = araraApplication().container.cloudStorageService,
+          tagsService = araraApplication().container.tagsService,
           profileService = araraApplication().container.profileService,
         )
       )
     }
     initializer {
       ClothesDetailsViewModel()
+    }
+    initializer {
+      ClothesRegisterViewModel(
+        ClothesService(
+          clothesRepository = araraApplication().container.clothesRepository,
+          cloudStorageService = araraApplication().container.cloudStorageService,
+          profileService = araraApplication().container.profileService,
+          tagsService = araraApplication().container.tagsService
+        ),
+        araraApplication().container.tagsService
+      )
+    
     }
   }
 }

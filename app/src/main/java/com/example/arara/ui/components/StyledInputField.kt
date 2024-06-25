@@ -27,6 +27,7 @@ fun InputField(
   visualTransformation: VisualTransformation? = null,
   keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
   errorMessage: String,
+  multiline: Boolean? = false,
   modifier: Modifier
 ) {
   Column {
@@ -44,15 +45,19 @@ fun InputField(
       visualTransformation =  visualTransformation ?: VisualTransformation.None,
       keyboardOptions = keyboardOptions,
       isError = errorMessage.isNotEmpty(),
-      singleLine = true,
+      singleLine = multiline == false || multiline == null,
       shape = MaterialTheme.shapes.small,
       colors = TextFieldDefaults.colors(
         cursorColor = Color.Black,
         disabledLabelColor = Color.LightGray,
         focusedIndicatorColor = Color.Transparent,
+        focusedLabelColor = Color.Black,
+        focusedContainerColor = Color(0x7ACBCBCB),
         unfocusedIndicatorColor = Color.Transparent,
-        unfocusedContainerColor = Color.White.copy(alpha = "7A".toInt(16) / 255f)
+//        unfocusedContainerColor = Color.White.copy(alpha = "7A".toInt(16) / 255f)
+        unfocusedContainerColor = Color(0x7ACBCBCB)
       ),
+      textStyle = MaterialTheme.typography.labelMedium,
       trailingIcon = aboutIcon?.let { { aboutIcon() } },
       modifier = modifier
         .onFocusEvent {if (it.isFocused) onClick() }
