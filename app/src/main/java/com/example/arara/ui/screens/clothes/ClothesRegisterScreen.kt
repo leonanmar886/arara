@@ -26,6 +26,7 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -223,11 +224,15 @@ fun ClothesRegisterScreenContent(
 			){
 				Button(
 					onClick = onRegister,
+					colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00B8A9)),
 					modifier = Modifier
 						.height(60.dp)
-						.padding(10.dp),
+						.padding(10.dp)
 				) {
-					Text(text = "Salvar")
+					Text(
+						text = "SALVAR",
+						fontSize = 12.sp
+					)
 				}
 			}
 		}
