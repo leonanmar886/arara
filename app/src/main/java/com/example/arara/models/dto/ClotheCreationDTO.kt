@@ -10,7 +10,8 @@ data class ClotheCreationDTO(
     val size: String,
     val description: String,
     val tags: List<String>,
-    val imageURI: Uri
+    val imageURI: Uri,
+    var profile_id: String
 ) {
     fun toClothes(uri: String): Clothes {
         return Clothes(
@@ -20,7 +21,8 @@ data class ClotheCreationDTO(
             size = size,
             description = description,
             tags = tags,
-            imageURI = uri
+            imageURI = uri,
+            profile_id = profile_id
         )
     }
 }

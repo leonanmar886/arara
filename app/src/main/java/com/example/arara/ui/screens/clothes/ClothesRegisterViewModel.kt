@@ -1,6 +1,8 @@
 package com.example.arara.ui.screens.clothes
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -98,7 +100,7 @@ class ClothesRegisterViewModel(
     }
   }
   
-  fun registerClothes() {
+  fun registerClothes(context: Context) {
     clothesUiState = ClothesRegisterState(
       clothesUiState.clothesDetails.copy(isLoading = true)
     )
@@ -112,7 +114,8 @@ class ClothesRegisterViewModel(
             size = clothesUiState.clothesDetails.size,
             description = clothesUiState.clothesDetails.description,
             tags = clothesUiState.clothesDetails.tags,
-            imageURI = Uri.parse(clothesUiState.clothesDetails.image)
+            imageURI = Uri.parse(clothesUiState.clothesDetails.image),
+            profile_id = "profileId"
           ),
           presentTags = clothesUiState.clothesDetails.tagsFromDb
         )
@@ -122,6 +125,7 @@ class ClothesRegisterViewModel(
         )
         
       } catch (e: Exception) {
+        Log.e("ClothesRegisterViewModel", "Error registering clothes", e)
         clothesUiState = ClothesRegisterState(
           clothesUiState.clothesDetails.copy(
             isLoading = false,

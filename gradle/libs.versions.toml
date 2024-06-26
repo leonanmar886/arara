@@ -1,4 +1,5 @@
 [versions]
+accompanist-permissions = "0.24.7-alpha"
 activity-compose-version = "1.8.2"
 agp = "8.3.2"
 androidx-macro-benchmark = "1.2.4"
@@ -43,6 +44,7 @@ converter-gson = "2.9.0"
 kotlinx-serialization-json = "1.6.0"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
 androidx-activity-compose-v182 = { module = "androidx.activity:activity-compose", version.ref = "activity-compose-version" }
 androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompat-version" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidx-macro-benchmark" }

@@ -1,11 +1,5 @@
 package com.example.arara.ui.screens.clothes
 
-import android.app.Activity
-import android.content.Intent
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -55,7 +49,6 @@ import coil.request.ImageRequest
 import com.example.arara.R
 import com.example.arara.models.Clothes
 import com.example.arara.ui.AppViewModelProvider
-import com.example.arara.ui.activities.ImageSelectionActivity
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
 
@@ -164,13 +157,13 @@ fun Logo(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 10.dp,top = 16.dp, bottom = 20.dp)
     ){
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
-            modifier = Modifier
+            modifier = modifier
                 .size(45.dp)
                 .fillMaxWidth()
         )
@@ -236,7 +229,7 @@ fun Footer(
         containerColor = Color.White,
         content = {
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
@@ -244,36 +237,36 @@ fun Footer(
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Icone pessoas",
-                    modifier = Modifier
+                    modifier = modifier
                         .size(36.dp)
                 )
                 Image(
                     painter = painterResource(id = R.drawable.footer_division),
                     contentDescription = "divisor do rodapé",
-                    modifier = Modifier
+                    modifier = modifier
                         .size(36.dp)
                 )
                 Image(
                     painter = painterResource(id = R.drawable.iconepessoas2),
                     contentDescription = "Icone pessoas",
-                    modifier = Modifier
+                    modifier = modifier
                         .size(30.dp)
                 )
                 Image(
                     painter = painterResource(id = R.drawable.footer_division),
                     contentDescription = "divisor do rodapé",
-                    modifier = Modifier
+                    modifier = modifier
                         .size(36.dp)
                 )
                 Image(
                     painter = painterResource(id = R.drawable.tresbarras),
                     contentDescription = "Icone pessoas",
-                    modifier = Modifier
+                    modifier = modifier
                         .size(30.dp)
                 )
             }
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
     )

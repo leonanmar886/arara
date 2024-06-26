@@ -1,14 +1,11 @@
 package com.example.arara.ui.screens.clothes
 
-import android.app.Activity
-import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,11 +25,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
@@ -59,9 +54,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.arara.R
 import com.example.arara.ui.AppViewModelProvider
-import com.example.arara.ui.activities.ImageSelectionActivity
 import com.example.arara.ui.components.CustomDialog
 import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
@@ -77,9 +73,9 @@ fun ClothesRegisterScreen(
 	viewModel: ClothesRegisterViewModel = viewModel(factory = AppViewModelProvider.Factory),
 	navigateToList: () -> Unit
 ) {
-	
 	val clothesUiState = viewModel.clothesUiState
 	val clothesDetails = clothesUiState.clothesDetails
+	val context = LocalContext.current
 	
 	Scaffold(
 		topBar = {
@@ -110,13 +106,14 @@ fun ClothesRegisterScreen(
 		ClothesRegisterScreenContent(
 			registerDetails = clothesDetails,
 			onRegisterInfoChange = viewModel::updateUiState,
-			onRegister = { viewModel.registerClothes() },
+			onRegister = {
+				viewModel.registerClothes(context)
+				navigateToList()
+		 },
 		)
 	}
-	
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClothesRegisterScreenContent(
 	modifier: Modifier = Modifier,
@@ -124,16 +121,7 @@ fun ClothesRegisterScreenContent(
 	onRegisterInfoChange: (ClothesRegisterDetails) -> Unit,
 	onRegister: () -> Unit
 ){
-	val context = LocalContext.current
-	val activity = context as AppCompatActivity
-	val startForResult = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
-		if (result.resultCode == Activity.RESULT_OK) {
-			val uri = result.data?.data
-			if (uri != null) {
-				onRegisterInfoChange(registerDetails.copy(image = uri.toString()))
-			}
-		}
-	}
+	val painter = rememberAsyncImagePainter(model = registerDetails.image)
 	
 	Column(
 		modifier = modifier
@@ -156,19 +144,14 @@ fun ClothesRegisterScreenContent(
 				verticalArrangement = Arrangement.Center,
 				modifier = Modifier.fillMaxWidth()
 			){
-				IconButton(
-					onClick = {
-						val intent = Intent(activity, ImageSelectionActivity::class.java)
-						startForResult.launch(intent)
+				ImagePicker(
+					onImagePicked = { uri ->
+						if (uri != null) {
+							onRegisterInfoChange(registerDetails.copy(image = uri.toString()))
+						}
 					},
-					modifier = Modifier.size(165.dp),
-					content = {
-						Image(
-							painter = painterResource(id = R.drawable.add_photo),
-							contentDescription = "Adicionar foto",
-							modifier = Modifier.size(130.dp)
-						)
-					}
+					painter = painter,
+					registerDetails = registerDetails
 				)
 				Text(text = "Adicione uma foto da sua roupa", color = Color.Gray, fontSize = 14.sp)
 			}
@@ -214,8 +197,14 @@ fun ClothesRegisterScreenContent(
 				horizontalArrangement = Arrangement.SpaceBetween
 			) {
 				Box(modifier = Modifier.fillMaxWidth()){
-					SelectComponent(
-						options = listOf("PP", "P", "M", "G", "GG", "XG", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "60")
+					InputField(
+						value = registerDetails.size,
+						onValueChange = { onRegisterInfoChange(registerDetails.copy(size = it)) },
+						label = "Tamanho",
+						errorMessage = if (registerDetails.errorMessages.size == -1) {""} else {
+							stringResource(id = registerDetails.errorMessages.size)
+						},
+						modifier = modifier.fillMaxWidth()
 					)
 				}
 			}
@@ -224,8 +213,22 @@ fun ClothesRegisterScreenContent(
 				AutocompleteComponent(
 					options = registerDetails.tagsOptions,
 					selectedOptions = registerDetails.tags,
-					onChangeSelectedOptions = { onRegisterInfoChange(registerDetails.copy(tags = it)) }
+					onChangeSelectedOptions = { onRegisterInfoChange(registerDetails.copy(tags = it)) },
+					onChangeOptions = { onRegisterInfoChange(registerDetails.copy(tagsOptions = it)) }
 				)
+			}
+			Row (
+				modifier = Modifier.fillMaxWidth(),
+				horizontalArrangement = Arrangement.End
+			){
+				Button(
+					onClick = onRegister,
+					modifier = Modifier
+						.height(60.dp)
+						.padding(10.dp),
+				) {
+					Text(text = "Salvar")
+				}
 			}
 		}
 	}
@@ -235,7 +238,8 @@ fun ClothesRegisterScreenContent(
 fun AutocompleteComponent(
 	options: List<String>,
 	selectedOptions: List<String>,
-	onChangeSelectedOptions: (List<String>) -> Unit = {}
+	onChangeSelectedOptions: (List<String>) -> Unit = {},
+	onChangeOptions: (List<String>) -> Unit = {}
 ) {
 	var expanded by remember { mutableStateOf(false) }
 	val scrollState = rememberScrollState()
@@ -281,6 +285,8 @@ fun AutocompleteComponent(
 				verticalAlignment = Alignment.CenterVertically,
 			) {
 				val createTagDialog = remember { mutableStateOf(false) }
+				val tagToAdd = remember { mutableStateOf("") }
+				
 				IconButton(
 					onClick = { createTagDialog.value = true},
 					modifier = Modifier.size(24.dp),
@@ -296,12 +302,52 @@ fun AutocompleteComponent(
 						CustomDialog(
 							title = "Crie uma nova tag",
 							content = {
-								InputField(
-									value = "",
-									onValueChange = {},
-									label = "Nome",
-									errorMessage = "",
-									modifier = Modifier)
+								Column(
+									modifier = Modifier
+										.padding(0.dp, 5.dp, 15.dp, 0.dp),
+									verticalArrangement = Arrangement.spacedBy(10.dp),
+									horizontalAlignment = Alignment.CenterHorizontally
+								) {
+									InputField(
+										value = tagToAdd.value,
+										onValueChange = { tagToAdd.value = it },
+										errorMessage = "",
+										modifier = Modifier
+											.fillMaxWidth()
+											.clip(RoundedCornerShape(10.dp))
+											.background(Color.White)
+									)
+									Row(
+										horizontalArrangement = Arrangement.Center
+									){
+										Button(
+											onClick = {
+												onChangeSelectedOptions(
+													selectedOptions
+														.toMutableList()
+														.apply {
+															if (!contains(tagToAdd.value)) {
+																add(tagToAdd.value)
+															}
+														}
+												)
+												onChangeOptions(
+													options
+														.toMutableList()
+														.apply {
+															if (!contains(tagToAdd.value)) {
+																add(tagToAdd.value)
+															}
+														}
+												)
+												createTagDialog.value = false
+											},
+											modifier = Modifier.fillMaxWidth(),
+										) {
+											Text(text = "Criar")
+										}
+									}
+								}
 							},
 							onDismiss = { createTagDialog.value = false }
 						)
@@ -348,49 +394,37 @@ fun AutocompleteComponent(
 }
 
 @Composable
-fun SelectComponent(
-	options: List<String>
+fun ImagePicker(
+	onImagePicked: (Uri?) -> Unit,
+	painter: AsyncImagePainter,
+	registerDetails: ClothesRegisterDetails
 ) {
-	var expanded by remember { mutableStateOf(false) }
-	var selectedOption by remember { mutableStateOf("Tamanho") }
-	
-	Box(modifier = Modifier
-		.fillMaxWidth()
-		.border(2.dp, Color.LightGray, RoundedCornerShape(10.dp))
-		.padding(start = 16.dp, top = 16.dp, end = 25.dp, bottom = 16.dp)
-		.clickable { expanded = !expanded }
-	) {
-		Row(
-			verticalAlignment = Alignment.CenterVertically,
-			horizontalArrangement = Arrangement.SpaceBetween,
-			modifier = Modifier.fillMaxWidth()
-		) {
-			Text(
-				text = selectedOption,
-				style = MaterialTheme.typography.labelMedium
-			)
-			Icon(
-				imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
-				contentDescription = if (expanded) "Menu aberto" else "Menu fechado"
-			)
+	val launcher = rememberLauncherForActivityResult(
+		contract = ActivityResultContracts.GetContent(),
+		onResult = { uri: Uri? ->
+			onImagePicked(uri)
 		}
-		DropdownMenu(
-			expanded = expanded,
-			onDismissRequest = { expanded = false },
-			modifier = Modifier
-				.background(Color.White)
-				.height(200.dp),
-		) {
-			options.forEach { option ->
-				DropdownMenuItem(
-					onClick = {
-						selectedOption = option
-						expanded = false
-					},
-					text = { Text(text = option, style = MaterialTheme.typography.labelMedium) })
+	)
+	
+	IconButton(
+		onClick = { launcher.launch("image/*") },
+		modifier = Modifier.size(165.dp),
+		content = {
+			if (registerDetails.image.isNotBlank()) {
+				Image(
+					painter = painter,
+					contentDescription = "Adicionar foto",
+					modifier = Modifier.size(130.dp)
+				)
+			} else {
+				Image(
+					painter = painterResource(id = R.drawable.add_photo),
+					contentDescription = "Adicionar foto",
+					modifier = Modifier.size(130.dp)
+				)
 			}
 		}
-	}
+	)
 }
 
 @Preview
@@ -443,5 +477,4 @@ fun ClothesRegisterScreenPreview(
 			onRegister = { }
 		)
 	}
-	
 }

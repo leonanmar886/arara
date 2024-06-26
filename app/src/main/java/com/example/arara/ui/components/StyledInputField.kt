@@ -23,7 +23,7 @@ fun InputField(
   onValueChange: (String) -> Unit,
   onClick: () -> Unit = {},
   aboutIcon: @Composable (() -> Unit)? = {},
-  label: String,
+  label: String? = null,
   visualTransformation: VisualTransformation? = null,
   keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
   errorMessage: String,
@@ -35,12 +35,14 @@ fun InputField(
       value = value,
       onValueChange = onValueChange,
       label = {
-        Text(
-          text = label,
-          fontFamily = FontFamily(Font(R.font.quicksand)),
-          fontWeight = FontWeight.W700,
-          fontSize = 12.sp
-        )
+        if (label != null) {
+          Text(
+            text = label,
+            fontFamily = FontFamily(Font(R.font.quicksand)),
+            fontWeight = FontWeight.W700,
+            fontSize = 12.sp
+          )
+        }
       },
       visualTransformation =  visualTransformation ?: VisualTransformation.None,
       keyboardOptions = keyboardOptions,

@@ -84,6 +84,7 @@ dependencies {
   androidTestImplementation(libs.junit.ext)
   androidTestImplementation(libs.espresso.core)
   
+  implementation(libs.accompanist.permissions)
   
 //Coil
   implementation(libs.coil.compose)

@@ -11,7 +11,8 @@ data class Clothes (
     val size: String,
     val description: String,
     val tags: List<String>,
-    var imageURI: String
+    var imageURI: String,
+    var profile_id: String
 ) {
     constructor() : this(
         id = "",
@@ -20,6 +21,7 @@ data class Clothes (
         size = "",
         description = "",
         tags = emptyList(),
-        imageURI = ""
+        imageURI = "",
+        profile_id = ""
     )
 }
