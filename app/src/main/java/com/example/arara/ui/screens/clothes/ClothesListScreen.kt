@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AddBox
@@ -24,6 +25,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +43,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,7 +55,6 @@ import coil.request.ImageRequest
 import com.example.arara.R
 import com.example.arara.models.Clothes
 import com.example.arara.ui.AppViewModelProvider
-import com.example.arara.ui.components.InputField
 import com.example.arara.ui.navigation.NavigationDestination
 
 object ClothesDestination: NavigationDestination {
@@ -85,23 +90,19 @@ fun ClothesListScreen(
                     .fillMaxWidth()
                     .padding(start = 25.dp, end = 25.dp)
             ) {
-                //InputForm(modifier = Modifier)
                 var text by remember { mutableStateOf("") }
-                InputField(
+                SearchField(
                     value = text,
                     onValueChange = { text = it },
-                    label = "Buscar",
+                    label = "Buscar por tags",
                     errorMessage = "",
                     aboutIcon = {
                         Icon(
                             imageVector = Icons.Filled.Search,
-                            contentDescription = "About",
+                            contentDescription = "Busque suas roupas",
                         )
                     },
                     modifier = Modifier
-                        .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(10.dp))
-                        .width(200.dp)
-                        .height(40.dp)
 
                 )
                 Button(
@@ -116,10 +117,11 @@ fun ClothesListScreen(
                 }
                 IconButton(
                     onClick = { navigateToRegister() },
+                    modifier = Modifier.size(24.dp),
                     content = {
                         Icon(
                             imageVector = Icons.Outlined.AddBox,
-                            contentDescription = "Buscar"
+                            contentDescription = "Criar Nova Roupa"
                         )
                     }
                 )
@@ -220,6 +222,60 @@ fun ImageCard(
     }
 }
 
+@Composable
+fun SearchField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    aboutIcon: @Composable (() -> Unit)? = {},
+    label: String? = null,
+    visualTransformation: VisualTransformation? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    errorMessage: String,
+    multiline: Boolean? = false,
+    modifier: Modifier
+) {
+    
+    Column {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            visualTransformation =  visualTransformation ?: VisualTransformation.None,
+            keyboardOptions = keyboardOptions,
+            isError = errorMessage.isNotEmpty(),
+            singleLine = multiline == false || multiline == null,
+            label = {
+                if (label != null) {
+                    Text(
+                        text = label,
+                        fontFamily = FontFamily(Font(R.font.quicksand)),
+                        fontWeight = FontWeight.W700,
+                        fontSize = 12.sp
+                    )
+                }
+            },
+            shape = MaterialTheme.shapes.medium,
+            colors = OutlinedTextFieldDefaults.colors(
+                cursorColor = Color.Black,
+                disabledLabelColor = Color.LightGray,
+                focusedBorderColor = Color.Black,
+                focusedLabelColor = Color.Black,
+            ),
+            textStyle = MaterialTheme.typography.labelSmall,
+            trailingIcon = aboutIcon?.let { { aboutIcon() } },
+            modifier = modifier
+                .width(200.dp)
+            
+        )
+        if(errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = modifier
+            )
+        }
+    }
+}
 
 @Composable
 fun Footer(
