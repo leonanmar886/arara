@@ -103,6 +103,8 @@ class UserRegisterViewModel: ViewModel() {
           registerUiState.userRegisterDetails.password
         ).await()
         
+        
+        
         if (result.user != null) {
           registerUiState = UserRegisterState(
             userRegisterDetails = registerUiState.userRegisterDetails.copy(isRegistered = true)

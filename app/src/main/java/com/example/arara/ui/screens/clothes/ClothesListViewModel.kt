@@ -38,6 +38,10 @@ class ClothesListViewModel(
         private set
     
     init {
+        loadData()
+    }
+    
+    fun loadData() {
         viewModelScope.launch {
             val getTagsJob = async { getTags() }
             val getClothesJob = async { getClothes() }
