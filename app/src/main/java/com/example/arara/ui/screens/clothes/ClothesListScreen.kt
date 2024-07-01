@@ -151,7 +151,7 @@ fun ClothesListScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(16.dp, 0.dp)
-
+                    .background(color = Color.White)
             ) {
                 items(clothesList) { clothes ->
                     ImageCard(clothes = clothes, modifier = modifier, viewModel = viewModel)
@@ -209,7 +209,7 @@ fun ImageCard(
     ) {
         Card(
             modifier = modifier
-                .shadow(15.dp, shape = RoundedCornerShape(12.dp))
+                .shadow(2.dp, shape = RoundedCornerShape(12.dp))
                 .size(width = 150.dp, height = 150.dp)
         ) {
             AsyncImage(

@@ -127,7 +127,8 @@ fun ClothesRegisterScreenContent(
 	Column(
 		modifier = modifier
 			.fillMaxSize()
-			.padding(start = 30.dp, end = 30.dp),
+			.padding(start = 30.dp, end = 30.dp)
+			.background(Color.White),
 		horizontalAlignment = Alignment.CenterHorizontally,
 		verticalArrangement = Arrangement.Center
 	) {
