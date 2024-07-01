@@ -8,39 +8,74 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.arara.R
 import com.example.arara.models.Clothes
+import com.example.arara.models.Tag
 import com.example.arara.services.ClothesService
+import com.example.arara.services.TagsService
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 data class ClothesListErrorMessages(
     val search: Int = -1,
     val listClothes: Int = -1,
+    val listTags: Int = -1,
     val general: Int = -1
 )
 
 data class ClothesDetails(
     val search: String = "",
     val clothes: List<Clothes> = emptyList(),
+    val tags: List<String> = emptyList(),
     val errorMessages: ClothesListErrorMessages = ClothesListErrorMessages()
 )
 
-class ClothesListViewModel(private val clothesService: ClothesService) : ViewModel() {
-
+class ClothesListViewModel(
+    private val clothesService: ClothesService,
+    private val tagsService: TagsService
+) : ViewModel() {
+    
     var clothesUiState by mutableStateOf(ClothesDetails())
         private set
     
     init {
-        getClothes()
-    }
-    
-    private fun getClothes() {
         viewModelScope.launch {
-            clothesUiState = try {
-                ClothesDetails(clothes = clothesService.getAllClothes())
+            val getTagsJob = async { getTags() }
+            val getClothesJob = async { getClothes() }
+            
+            try {
+                val tags = getTagsJob.await()
+                val clothes = getClothesJob.await()
+                
+                clothesUiState = clothesUiState.copy(
+                    tags = tags,
+                    clothes = clothes
+                )
+                
+                Log.d("ClothesListViewModel", "Tags: ${clothesUiState.tags}")
+                Log.d("ClothesListViewModel", "Clothes: ${clothesUiState.clothes}")
             } catch (e: Exception) {
-                ClothesDetails(errorMessages = ClothesListErrorMessages(listClothes = R.string.error_clothes_list))
+                clothesUiState = clothesUiState.copy(
+                    errorMessages = ClothesListErrorMessages(
+                        listClothes = R.string.error_clothes_list,
+                        listTags = -1
+                    )
+                )
             }
-            Log.d("ClothesListViewModel", "Clothes: ${clothesUiState.clothes}")
         }
     }
-
+    
+    private suspend fun getTags(): List<String> {
+        return try {
+            tagsService.getAllTags().map(Tag::name)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+    
+    private suspend fun getClothes(): List<Clothes> {
+        return try {
+            clothesService.getAllClothes()
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 }

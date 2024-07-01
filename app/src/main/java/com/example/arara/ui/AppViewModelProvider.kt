@@ -27,7 +27,8 @@ object AppViewModelProvider {
           cloudStorageService = araraApplication().container.cloudStorageService,
           tagsService = araraApplication().container.tagsService,
           profileService = araraApplication().container.profileService,
-        )
+        ),
+        araraApplication().container.tagsService
       )
     }
     initializer {
