@@ -256,44 +256,53 @@ fun AutocompleteComponent(
 	) {
 		Row(
 			verticalAlignment = Alignment.CenterVertically,
-			horizontalArrangement = Arrangement.SpaceBetween,
 			modifier = Modifier.fillMaxWidth()
 		) {
-			if (selectedOptions.isEmpty()) {
-				Text(
-					text = "Adicione tags",
-					style = MaterialTheme.typography.labelMedium
-				)
-			} else {
-				Row(
-					modifier = Modifier.horizontalScroll(scrollState)
-				) {
-					selectedOptions.forEach { option ->
-						InputChip(
-							label = { Text(text = option, style = MaterialTheme.typography.labelMedium) },
-							onClick = { onChangeSelectedOptions(selectedOptions.filter { it != option }) },
-							selected = false,
-							trailingIcon = {
-								Icon(
-									imageVector = Icons.Outlined.Close,
-									contentDescription = "Remover tag",
-									modifier = Modifier.size(16.dp)
-								)
-							},
-							modifier = Modifier.padding(end = 8.dp)
-						)
+			Box(
+				modifier = Modifier
+					.weight(1f)
+					.horizontalScroll(scrollState)
+			) {
+				if (selectedOptions.isEmpty()) {
+					Text(
+						text = "Adicione tags",
+						style = MaterialTheme.typography.labelMedium
+					)
+				} else {
+					Row {
+						selectedOptions.forEach { option ->
+							InputChip(
+								label = { Text(text = option, style = MaterialTheme.typography.labelMedium) },
+								onClick = { onChangeSelectedOptions(selectedOptions.filter { it != option }) },
+								selected = false,
+								trailingIcon = {
+									Icon(
+										imageVector = Icons.Outlined.Close,
+										contentDescription = "Remover tag",
+										modifier = Modifier.size(16.dp)
+									)
+								},
+								modifier = Modifier.padding(end = 8.dp)
+							)
+						}
 					}
 				}
 			}
 			Row(
 				horizontalArrangement = Arrangement.End,
 				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier
+					.clip(RoundedCornerShape(10.dp))
+					.background(Color.LightGray)
+					.height(32.dp)
+					.border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+					.padding(5.dp)
 			) {
 				val createTagDialog = remember { mutableStateOf(false) }
 				val tagToAdd = remember { mutableStateOf("") }
 				
 				IconButton(
-					onClick = { createTagDialog.value = true},
+					onClick = { createTagDialog.value = true },
 					modifier = Modifier.size(24.dp),
 					content = {
 						Icon(
@@ -324,7 +333,7 @@ fun AutocompleteComponent(
 									)
 									Row(
 										horizontalArrangement = Arrangement.Center
-									){
+									) {
 										Button(
 											onClick = {
 												onChangeSelectedOptions(
