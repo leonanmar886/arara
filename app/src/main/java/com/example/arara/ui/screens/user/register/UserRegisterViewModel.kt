@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.arara.R
+import com.example.arara.models.Profile
+import com.example.arara.models.User
+import com.example.arara.services.ProfileService
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -38,7 +41,9 @@ data class UserRegisterState(
   val isRegisterValid: Boolean = false
 )
 
-class UserRegisterViewModel: ViewModel() {
+class UserRegisterViewModel(
+  private val profileService: ProfileService
+): ViewModel() {
   private var auth: FirebaseAuth = FirebaseAuth.getInstance()
   
   var registerUiState by mutableStateOf(UserRegisterState())
@@ -103,12 +108,22 @@ class UserRegisterViewModel: ViewModel() {
           registerUiState.userRegisterDetails.password
         ).await()
         
-        
-        
         if (result.user != null) {
           registerUiState = UserRegisterState(
             userRegisterDetails = registerUiState.userRegisterDetails.copy(isRegistered = true)
           )
+          profileService.addProfile(
+            Profile(
+              id = result.user!!.uid,
+              name = registerUiState.userRegisterDetails.name,
+              userName = registerUiState.userRegisterDetails.userName,
+              birthDate = registerUiState.userRegisterDetails.birthDate,
+              imageUri = "",
+              fullName = registerUiState.userRegisterDetails.profileName,
+              user = result.user!!.let { User(it.uid, it.email ?: "") }
+            )
+          ).await()
+          
         } else {
           UserRegisterState(
             userRegisterDetails = registerUiState.userRegisterDetails.copy(

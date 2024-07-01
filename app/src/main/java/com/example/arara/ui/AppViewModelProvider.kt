@@ -18,7 +18,9 @@ object AppViewModelProvider {
       LoginViewModel()
     }
     initializer {
-      UserRegisterViewModel()
+      UserRegisterViewModel(
+        araraApplication().container.profileService
+      )
     }
     initializer {
       ClothesListViewModel(

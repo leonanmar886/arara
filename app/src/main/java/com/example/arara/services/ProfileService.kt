@@ -12,7 +12,7 @@ class ProfileService(
   private val cloudStorageService: CloudStorageService
 ) {
   fun getProfile(id: String) = profileRepository.get(id)
-  fun addProfile(profile: Profile) = profileRepository.add(profile)
+  suspend fun addProfile(profile: Profile) = profileRepository.add(profile)
   fun updateProfile(profile: Profile) = profileRepository.update(profile)
   fun deleteProfile(profile: Profile) = profileRepository.delete(profile)
   fun getAllProfiles() = profileRepository.getAll()
