@@ -23,6 +23,7 @@ data class ClothesListErrorMessages(
 
 data class ClothesDetails(
     val search: String = "",
+    val dbClothes: List<Clothes> = emptyList(),
     val clothes: List<Clothes> = emptyList(),
     val tags: List<String> = emptyList(),
     val errorMessages: ClothesListErrorMessages = ClothesListErrorMessages()
@@ -47,7 +48,8 @@ class ClothesListViewModel(
                 
                 clothesUiState = clothesUiState.copy(
                     tags = tags,
-                    clothes = clothes
+                    clothes = clothes,
+                    dbClothes = clothes
                 )
                 
                 Log.d("ClothesListViewModel", "Tags: ${clothesUiState.tags}")
@@ -61,6 +63,18 @@ class ClothesListViewModel(
                 )
             }
         }
+    }
+    
+    fun filterClothes(search: String) {
+        val filteredClothes = clothesUiState.dbClothes.filter { clothes ->
+            clothes.tags.any { tag ->
+                tag.contains(search, ignoreCase = true)
+            }
+        }
+        
+        clothesUiState = clothesUiState.copy(
+            clothes = filteredClothes
+        )
     }
     
     private suspend fun getTags(): List<String> {
