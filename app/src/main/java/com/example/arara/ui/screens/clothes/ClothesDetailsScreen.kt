@@ -184,7 +184,7 @@ fun ClothesDetailsScreen(
                             color = Color.Black,
                             fontSize = 16.sp,
                             textAlign = TextAlign.Start,
-                            fontFamily = FontFamily(Font(R.font.outfit)),
+                            fontFamily = FontFamily(Font(R.font.outfit_eb)),
                         )
                     }
                     Row(
@@ -206,7 +206,7 @@ fun ClothesDetailsScreen(
                                 color = Color.Black,
                                 fontSize = 16.sp,
                                 textAlign = TextAlign.Start,
-                                fontFamily = FontFamily(Font(R.font.outfit)),
+                                fontFamily = FontFamily(Font(R.font.outfit_eb)),
                             )
                         }
                     }
