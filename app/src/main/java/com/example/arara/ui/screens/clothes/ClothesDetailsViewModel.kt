@@ -5,7 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.example.arara.models.Clothes
+import com.example.arara.services.ClothesService
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,92 +20,34 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-interface ClothingApi {
-    @PUT("clothing/{id}")
-    fun putClothing(@Path("id") id: String, @Body clotheUpdate: Clothes): Call<Clothes>
-
-    @DELETE("clothing/{id}")
-    fun deleteClothing(@Path("id") id: String): Call<Clothes>
-
-    @GET("clothing/{id}")
-    fun getClothingByID(@Path("id") id: String): Call<Clothes>
-}
-
-val api: ClothingApi = Retrofit.Builder()
-    .baseUrl(" COLOCAR AQUI A URL DO BANCO ")
-    .build()
-    .create(ClothingApi::class.java)
-
-fun updateClothing(clothes: Clothes) {
-    clothingExists(clothes.id) { exists ->
-        if (exists) {
-            val call = api.putClothing(clothes.id, clothes)
-            call.enqueue(object : Callback<Clothes> {
-                override fun onResponse(call: Call<Clothes>, response: Response<Clothes>) {
-                    if (response.isSuccessful) {
-                        Log.d("UPDATE", "Peça de roupa atualizada com sucesso")
-                    } else {
-                        Log.e("UPDATE", "Erro ao atualizar peça de roupa")
-                    }
-                }
-
-                override fun onFailure(call: Call<Clothes>, t: Throwable) {
-                    Log.e("UPDATE", "Erro ao atualizar peça de roupa", t)
-                }
-            })
-        } else {
-            Log.e("UPDATE", "Peça de roupa não encontrada")
-        }
-    }
-}
-
-fun deleteClothing(id: String) {
-    clothingExists(id) { exists ->
-        if (exists) {
-            val call = api.deleteClothing(id)
-            call.enqueue(object : Callback<Clothes> {
-                override fun onResponse(call: Call<Clothes>, response: Response<Clothes>) {
-                    if (response.isSuccessful) {
-                        Log.d("DELETE", "Peça de roupa deletada com sucesso")
-                    } else {
-                        Log.e("DELETE", "Erro ao deletar peça de roupa")
-                    }
-                }
-
-                override fun onFailure(call: Call<Clothes>, t: Throwable) {
-                    Log.e("DELETE", "Erro ao deletar peça de roupa", t)
-                }
-            })
-        } else {
-            Log.e("DELETE", "Peça de roupa não encontrada")
-        }
-    }
-}
-
-fun clothingExists(id: String, onResult: (Boolean) -> Unit) {
-    val call = api.getClothingByID(id)
-
-    call.enqueue(object : Callback<Clothes> {
-        override fun onResponse(call: Call<Clothes>, response: Response<Clothes>) {
-            onResult(response.isSuccessful)
-        }
-
-        override fun onFailure(call: Call<Clothes>, t: Throwable) {
-            onResult(false)
-        }
-    })
-}
-
 data class ClothesState(
-    val clothes: List<Clothes> = emptyList(),
+    val clothes: Clothes = Clothes(),
     val isLoading: Boolean = false,
     val error: String = ""
 )
 
-class ClothesDetailsViewModel : ViewModel() {
-
+class ClothesDetailsViewModel(
+    private val clothesService: ClothesService,
+) : ViewModel() {
+    
     var clothesUiState by mutableStateOf(ClothesState())
         private set
-
+    
+    fun loadClothesDetails(clothesId: String) {
+        viewModelScope.launch {
+            clothesUiState = clothesUiState.copy(isLoading = true)
+            clothesUiState = clothesUiState.copy(
+                clothes = clothesService.getClothe(clothesId),
+                isLoading = false
+            )
+        }
+    }
+    
+    fun deleteClothes() {
+        viewModelScope.launch {
+            clothesService.deleteClothe(clothesUiState.clothes)
+        }
+    }
 }
+
 

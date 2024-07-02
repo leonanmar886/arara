@@ -1,7 +1,7 @@
 package com.example.arara.ui.screens.clothes
 
+import ScrollableRow
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,23 +11,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.arara.R
 import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.navigation.NavigationDestination
@@ -50,125 +60,175 @@ fun ClothesDetailsScreen(
 ) {
     val clothesUiState = viewModel.clothesUiState
     
-    Log.d("ClothesDetailsScreen", "clothesId: $clothesId")
-
-    val images = listOf(
-        R.drawable.calcabege1,
-        R.drawable.calcabege2,
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Logo(modifier = modifier)
-
-
-        Text(
-            text = "Calça Jeans Bege",
-            color = Color.Black,
-            fontSize = 25.sp,
-            fontFamily = FontFamily(Font(R.font.quicksand)),
-            fontWeight = FontWeight.Black,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, top = 10.dp, bottom = 10.dp)
-        )
-
-        Column(
-            modifier = Modifier
-                .weight(1f)
-        ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+    viewModel.loadClothesDetails(clothesId)
+    
+    Scaffold(
+        topBar = {
+            Row(
                 modifier = Modifier
-                    .padding(16.dp, 2.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                items(images.size) { index ->
-                    ImageCard2(modifier = modifier, imageRes = images[index])
+                Logo(modifier = modifier)
+                IconButton(
+                    onClick = { navigateToHome() },
+                    content = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Voltar"
+                        )
+                    }
+                )
+            }
+        },
+        bottomBar = {
+            Row {
+                Footer(modifier = modifier)
+            }
+        },
+        content = { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(Color.White)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = clothesUiState.clothes.name,
+                            color = Color.Black,
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight(900),
+                            fontFamily = FontFamily(Font(R.font.outfit_eb)),
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    // TODO
+                                },
+                                modifier = Modifier.size(24.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Edit,
+                                    contentDescription = "Editar"
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    viewModel.deleteClothes()
+                                    navigateToHome()
+                                },
+                                modifier = Modifier.size(24.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.DeleteForever,
+                                    contentDescription = "Deletar"
+                                )
+                            }
+                        }
+                    }
+                    val context = LocalContext.current
+                    val imageLoader = remember(context) { ImageLoader(context) }
+                    val request = remember(clothesUiState.clothes.imageURI) {
+                        ImageRequest.Builder(context)
+                            .data(clothesUiState.clothes.imageURI)
+                            .build()
+                    }
+                    
+                    AsyncImage(
+                        model = request,
+                        imageLoader = imageLoader,
+                        contentDescription = clothesUiState.clothes.name,
+                        modifier = modifier
+                            .height(400.dp)
+                    )
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "Detalhes da Peça",
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Start,
+                            fontFamily = FontFamily(Font(R.font.outfit_eb)),
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "Descrição: ",
+                            color = Color.Black,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(900),
+                            textAlign = TextAlign.Start,
+                            fontFamily = FontFamily(Font(R.font.outfit_eb)),
+                        )
+                        Text(
+                            text = clothesUiState.clothes.description,
+                            color = Color.Black,
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Start,
+                            fontFamily = FontFamily(Font(R.font.outfit)),
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ){
+                        Row(
+                            modifier = Modifier.fillMaxWidth(0.5f),
+                        ) {
+                            Text(
+                                text = "Tamanho: ",
+                                color = Color.Black,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(900),
+                                textAlign = TextAlign.Start,
+                                fontFamily = FontFamily(Font(R.font.outfit_eb)),
+                            )
+                            Text(
+                                text = clothesUiState.clothes.size,
+                                color = Color.Black,
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Start,
+                                fontFamily = FontFamily(Font(R.font.outfit)),
+                            )
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Tags: ",
+                            color = Color.Black,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(900),
+                            textAlign = TextAlign.Start,
+                            fontFamily = FontFamily(Font(R.font.outfit_eb)),
+                        )
+                        Log.d("ClothesDetailsScreen", "Tags: ${clothesUiState.clothes.tags}")
+                        ScrollableRow(
+                            items = clothesUiState.clothes.tags
+                        )
+                    }
                 }
             }
-
-            Text(
-                text = "Características",
-                color = Color.Black,
-                fontSize = 25.sp,
-                fontFamily = FontFamily(Font(R.font.quicksand)),
-                fontWeight = FontWeight.Black,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
-
-            Text(
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                color = Color.Black,
-                fontSize = 11.sp,
-                fontFamily = FontFamily(Font(R.font.quicksand)),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
         }
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 8.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(onClick = navigateToHome) {
-                Text(text = "Anunciar")
-            }
-        }
-
-
-        Footer(modifier = Modifier)
-    }
+    )
 }
-
-@Composable
-fun ImageCard2(
-    modifier: Modifier,
-    imageRes: Int
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(250.dp)
-            .padding(15.dp)
-            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(16.dp))
-    ) {
-        Image(
-            painter = painterResource(id = imageRes),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(shape = RoundedCornerShape(16.dp))
-        )
-    }
-}
-
-
-
-//ver isso aqui que deve ta errado
-/*
-@Composable
-fun Button(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    buttonText: String
-) {
-    Row(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = onClick) {
-            Text(text = buttonText)
-        }
-    }
-}
-
-*/

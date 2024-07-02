@@ -34,7 +34,14 @@ object AppViewModelProvider {
       )
     }
     initializer {
-      ClothesDetailsViewModel()
+      ClothesDetailsViewModel(
+        ClothesService(
+          clothesRepository = araraApplication().container.clothesRepository,
+          cloudStorageService = araraApplication().container.cloudStorageService,
+          tagsService = araraApplication().container.tagsService,
+          profileService = araraApplication().container.profileService,
+        ),
+      )
     }
     initializer {
       ClothesRegisterViewModel(

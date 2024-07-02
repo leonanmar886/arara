@@ -40,26 +40,21 @@ open class ClothesService(
     }
   }
   
-  fun getClothe(id: String): Clothes {
+  suspend fun getClothe(id: String): Clothes {
     var clothes: Clothes? = null
-    clothesRepository.get(id).addOnSuccessListener {
-      if (it != null) {
-        clothes = it.toObject(Clothes::class.java)
-      } else {
-        println("No document found")
-      }
-    }.addOnFailureListener { exception ->
-      println("Error getting document: $exception")
-    }
-    return clothes!!
+    val snapshot = clothesRepository.get(id).await()
+    
+    return snapshot.toObject(Clothes::class.java)?.apply {
+      imageURI = cloudStorageService.getDownloadUrl(imageURI).toString()
+    } ?: Clothes()
   }
   
   fun updateClothe(item: Clothes) {
     clothesRepository.update(item)
   }
   
-  fun deleteClothe(item: Clothes) {
-    clothesRepository.delete(item)
+  suspend fun deleteClothe(item: Clothes) {
+    clothesRepository.delete(item).await()
   }
   
   fun searchByTags(tags: List<String>): List<Clothes> {
