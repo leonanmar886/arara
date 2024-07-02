@@ -12,10 +12,11 @@ class ProfileService(
   private val cloudStorageService: CloudStorageService
 ) {
   fun getProfile(id: String) = profileRepository.get(id)
-  suspend fun addProfile(profile: Profile) = profileRepository.add(profile)
+  suspend fun addProfile(profile: Profile) = profileRepository.add(profile).await()
   fun updateProfile(profile: Profile) = profileRepository.update(profile)
   fun deleteProfile(profile: Profile) = profileRepository.delete(profile)
   fun getAllProfiles() = profileRepository.getAll()
+  fun logout() = FirebaseAuth.getInstance().signOut()
   suspend fun getLoggedProfile(): Profile? {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val userId = auth.currentUser?.uid ?: return null

@@ -10,6 +10,7 @@ import com.example.arara.R
 import com.example.arara.models.Clothes
 import com.example.arara.models.Tag
 import com.example.arara.services.ClothesService
+import com.example.arara.services.ProfileService
 import com.example.arara.services.TagsService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -31,7 +32,8 @@ data class ClothesDetails(
 
 class ClothesListViewModel(
     private val clothesService: ClothesService,
-    private val tagsService: TagsService
+    private val tagsService: TagsService,
+    private val profileService: ProfileService
 ) : ViewModel() {
     
     var clothesUiState by mutableStateOf(ClothesDetails())
@@ -39,6 +41,10 @@ class ClothesListViewModel(
     
     init {
         loadData()
+    }
+    
+    fun logout() {
+        profileService.logout()
     }
     
     fun loadData() {

@@ -122,7 +122,7 @@ class UserRegisterViewModel(
               fullName = registerUiState.userRegisterDetails.profileName,
               user = result.user!!.let { User(it.uid, it.email ?: "") }
             )
-          ).await()
+          )
           
         } else {
           UserRegisterState(

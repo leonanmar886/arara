@@ -30,7 +30,8 @@ object AppViewModelProvider {
           tagsService = araraApplication().container.tagsService,
           profileService = araraApplication().container.profileService,
         ),
-        araraApplication().container.tagsService
+        araraApplication().container.tagsService,
+        araraApplication().container.profileService
       )
     }
     initializer {

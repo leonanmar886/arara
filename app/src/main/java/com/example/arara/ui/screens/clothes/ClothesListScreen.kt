@@ -20,8 +20,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AddBox
+import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -76,6 +78,7 @@ object ClothesDestination: NavigationDestination {
 fun ClothesListScreen(
     navigateToDetails: (id: String) -> Unit,
     navigateToRegister: () -> Unit,
+    navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClothesListViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -105,7 +108,25 @@ fun ClothesListScreen(
             .fillMaxSize()
             .background(color = Color.White)
     ) {
-        Logo(modifier = modifier)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Logo(modifier = modifier)
+            IconButton(
+                onClick = {
+                    viewModel.logout()
+                    navigateToLogin()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
+                    contentDescription = "Sair da conta"
+                )
+            }
+        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -280,7 +301,9 @@ fun SearchField(
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = { expanded = !expanded },
-            modifier = modifier.width(200.dp).background(Color.Transparent)
+            modifier = modifier
+                .width(200.dp)
+                .background(Color.Transparent)
         ) {
             OutlinedTextField(
                 value = value,

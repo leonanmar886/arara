@@ -1,5 +1,6 @@
 package com.example.arara.ui.screens.login
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -84,6 +85,7 @@ class LoginViewModel: ViewModel() {
           loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
         }
     }
+    Log.d("LoginViewModel", auth.currentUser.toString())
   }
   
   private fun isValidEmail(email: String): Boolean {
