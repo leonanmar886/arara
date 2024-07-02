@@ -3,7 +3,9 @@ package com.example.arara.ui.screens.clothes
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +21,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AddBox
 import androidx.compose.material3.BottomAppBar
@@ -75,6 +79,7 @@ object ClothesDestination: NavigationDestination {
 fun ClothesListScreen(
     navigateToDetails: () -> Unit,
     navigateToRegister: () -> Unit,
+    navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClothesListViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -177,7 +182,7 @@ fun ClothesListScreen(
                     ImageCard(clothes = clothes, modifier = modifier, viewModel = viewModel)
                 }
             }
-            Footer(modifier = Modifier)
+            Footer(onClick = { viewModel.logout() }, modifier = Modifier)
         }
     }
 }
@@ -277,7 +282,9 @@ fun SearchField(
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = { expanded = !expanded },
-            modifier = modifier.width(200.dp).background(Color.Transparent)
+            modifier = modifier
+                .width(200.dp)
+                .background(Color.Transparent)
         ) {
             OutlinedTextField(
                 value = value,
@@ -342,6 +349,7 @@ fun SearchField(
 
 @Composable
 fun Footer(
+    onClick: () -> Unit,
     modifier: Modifier
 ) {
     BottomAppBar(
@@ -377,12 +385,13 @@ fun Footer(
                     modifier = modifier
                         .size(36.dp)
                 )
-                Image(
-                    painter = painterResource(id = R.drawable.tresbarras),
-                    contentDescription = "Icone pessoas",
-                    modifier = modifier
-                        .size(30.dp)
-                )
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = "Saia da sua conta",
+                        modifier = modifier
+                            .size(30.dp)
+                            .clickable { onClick = onClick }
+                    )
             }
         },
         modifier = modifier

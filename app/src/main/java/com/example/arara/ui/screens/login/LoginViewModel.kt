@@ -85,6 +85,14 @@ class LoginViewModel: ViewModel() {
         }
     }
   }
+
+  fun logout() {
+    viewModelScope.launch {
+      auth.signOut()
+      val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = false)
+      loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+    }
+  }
   
   private fun isValidEmail(email: String): Boolean {
     val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"

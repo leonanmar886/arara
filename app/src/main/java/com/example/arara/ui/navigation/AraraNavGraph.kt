@@ -35,7 +35,11 @@ fun AraraNavHost(
       RegisterScreen(navigateToHome = { navController.navigate(LoginDestination.route) })
     }
     composable(ClothesDestination.route) {
-      ClothesListScreen(navigateToDetails = {  }, navigateToRegister = { navController.navigate(ClothesRegisterDestination.route) })
+      ClothesListScreen(
+        navigateToDetails = {  },
+        navigateToRegister = { navController.navigate(ClothesRegisterDestination.route) },
+        navigateToLogin = { navController.navigate(LoginDestination.route) }
+      )
     }
     
     composable(ClothesRegisterDestination.route){
