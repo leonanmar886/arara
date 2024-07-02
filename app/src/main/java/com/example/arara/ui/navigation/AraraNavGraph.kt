@@ -3,9 +3,13 @@ package com.example.arara.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.arara.ui.screens.clothes.ClothesDestination
+import com.example.arara.ui.screens.clothes.ClothesDetailsDestination
+import com.example.arara.ui.screens.clothes.ClothesDetailsScreen
 import com.example.arara.ui.screens.clothes.ClothesListScreen
 import com.example.arara.ui.screens.clothes.ClothesRegisterDestination
 import com.example.arara.ui.screens.clothes.ClothesRegisterScreen
@@ -35,15 +39,19 @@ fun AraraNavHost(
       RegisterScreen(navigateToHome = { navController.navigate(LoginDestination.route) })
     }
     composable(ClothesDestination.route) {
-      ClothesListScreen(navigateToDetails = {  }, navigateToRegister = { navController.navigate(ClothesRegisterDestination.route) })
+      ClothesListScreen(navigateToDetails = { id -> navController.navigate("${ClothesDetailsDestination.route}/$id") }, navigateToRegister = { navController.navigate(ClothesRegisterDestination.route) })
     }
     
     composable(ClothesRegisterDestination.route){
       ClothesRegisterScreen(navigateToList = { navController.navigate(ClothesDestination.route) })
     }
-//    composable(ClothesDetailsDestination.route) {
-//      ClothesDetailsScreen(navigateToHome = { navController.navigate(LoginDestination.route) })
-//    }
+    composable(
+      route = "${ClothesDetailsDestination.route}/{${ClothesDetailsDestination.argClothesId}}",
+      arguments = listOf(navArgument(ClothesDetailsDestination.argClothesId) { type = NavType.StringType })
+    ) { backStackEntry ->
+      val clothesId = backStackEntry.arguments?.getString(ClothesDetailsDestination.argClothesId)
+      requireNotNull(clothesId) { "Clothes ID is required" }
+      ClothesDetailsScreen(clothesId = clothesId, navigateToHome = { navController.navigate(LoginDestination.route) })
+    }
   }
 }
-

@@ -1,5 +1,6 @@
 package com.example.arara.ui.screens.clothes
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,16 +36,21 @@ import com.example.arara.ui.navigation.NavigationDestination
 object ClothesDetailsDestination: NavigationDestination {
     override val route = "details"
     override val titleRes = R.string.clothesdetails_title
+    const val routeWithArgs = "clothesDetails/{clothesId}"
+    const val argClothesId = "clothesId"
 }
 
 
 @Composable
 fun ClothesDetailsScreen(
+    clothesId: String,
     navigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClothesDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val clothesUiState = viewModel.clothesUiState
+    
+    Log.d("ClothesDetailsScreen", "clothesId: $clothesId")
 
     val images = listOf(
         R.drawable.calcabege1,

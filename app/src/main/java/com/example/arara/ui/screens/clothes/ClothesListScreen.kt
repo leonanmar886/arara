@@ -3,6 +3,7 @@ package com.example.arara.ui.screens.clothes
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -73,7 +74,7 @@ object ClothesDestination: NavigationDestination {
 
 @Composable
 fun ClothesListScreen(
-    navigateToDetails: () -> Unit,
+    navigateToDetails: (id: String) -> Unit,
     navigateToRegister: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClothesListViewModel = viewModel(factory = AppViewModelProvider.Factory),
@@ -174,7 +175,7 @@ fun ClothesListScreen(
                     .background(color = Color.White)
             ) {
                 items(clothesList) { clothes ->
-                    ImageCard(clothes = clothes, modifier = modifier, viewModel = viewModel)
+                    ImageCard(clothes = clothes, modifier = modifier, viewModel = viewModel, navigateToDetails = navigateToDetails)
                 }
             }
             Footer(modifier = Modifier)
@@ -213,6 +214,7 @@ fun Logo(
 fun ImageCard(
     clothes: Clothes,
     modifier: Modifier,
+    navigateToDetails: (id: String) -> Unit,
     viewModel: ClothesListViewModel
 ) {
     val context = LocalContext.current
@@ -225,12 +227,13 @@ fun ImageCard(
     
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         Card(
             modifier = modifier
                 .shadow(2.dp, shape = RoundedCornerShape(12.dp))
                 .size(width = 150.dp, height = 150.dp)
+                .clickable { navigateToDetails(clothes.id) }
         ) {
             AsyncImage(
                 model = request,
