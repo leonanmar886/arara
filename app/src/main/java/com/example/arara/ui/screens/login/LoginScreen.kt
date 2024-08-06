@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.arara.R
 import com.example.arara.ui.AppViewModelProvider
 import com.example.arara.ui.components.InputField
+import com.example.arara.ui.components.LoadingComponent
 import com.example.arara.ui.navigation.NavigationDestination
 
 
@@ -57,15 +58,20 @@ fun LoginScreen(
     navigateToHome()
   }
   
-  LoginContent(
-    loginDetails = loginUiState.loginDetails,
-    onLoginInfoChange = viewModel::updateUiState,
-    onLoginClick = { viewModel.login() },
-    onSignUpRequest = navigateToUserRegister,
-    onGoogleAccount = navigateToLoginGoogle,
-    modifier = modifier,
-  )
+  val isLoading by viewModel::isLoading
   
+  if (isLoading) {
+    LoadingComponent()
+  } else {
+    LoginContent(
+      loginDetails = loginUiState.loginDetails,
+      onLoginInfoChange = viewModel::updateUiState,
+      onLoginClick = { viewModel.login() },
+      onSignUpRequest = navigateToUserRegister,
+      onGoogleAccount = navigateToLoginGoogle,
+      modifier = modifier,
+    )
+  }
 }
 
 @Composable

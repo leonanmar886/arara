@@ -39,6 +39,9 @@ class ClothesListViewModel(
     var clothesUiState by mutableStateOf(ClothesDetails())
         private set
     
+    var isLoading by mutableStateOf(false)
+        private set
+    
     init {
         loadData()
     }
@@ -48,6 +51,7 @@ class ClothesListViewModel(
     }
     
     fun loadData() {
+        isLoading = true
         viewModelScope.launch {
             val getTagsJob = async { getTags() }
             val getClothesJob = async { getClothes() }
@@ -71,6 +75,8 @@ class ClothesListViewModel(
                         listTags = -1
                     )
                 )
+            } finally {
+                isLoading = false
             }
         }
     }

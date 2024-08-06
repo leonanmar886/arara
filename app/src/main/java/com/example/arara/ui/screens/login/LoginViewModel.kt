@@ -26,13 +26,16 @@ data class LoginDetails(
 
 data class LoginState(
   val loginDetails: LoginDetails = LoginDetails(),
-  val isLoginValid: Boolean = false
+  val isLoginValid: Boolean = false,
 )
 
 class LoginViewModel: ViewModel() {
   private var auth: FirebaseAuth = FirebaseAuth.getInstance()
   
   var loginUiState by mutableStateOf(LoginState())
+    private set
+  
+  var isLoading by mutableStateOf(false)
     private set
   
   private fun validateInput(uiState: LoginDetails): Pair<Boolean, LoginDetails> {
@@ -59,11 +62,14 @@ class LoginViewModel: ViewModel() {
   }
   
   fun checkUserLoggedIn(): Boolean {
+    isLoading = true
     if (auth.currentUser != null) {
       val newLoginDetails: LoginDetails = loginUiState.loginDetails.copy(isLoggedId = true)
       loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+      isLoading = false
       return true
     }
+    isLoading = false
     return false
   }
   
@@ -71,6 +77,7 @@ class LoginViewModel: ViewModel() {
     if (!loginUiState.isLoginValid) {
       return
     }
+    isLoading = true
     
     viewModelScope.launch {
       auth.signInWithEmailAndPassword(loginUiState.loginDetails.email, loginUiState.loginDetails.password)
@@ -83,6 +90,9 @@ class LoginViewModel: ViewModel() {
             errorMessages = LoginErrorMessages(general = R.string.error_with_credentials)
           )
           loginUiState = loginUiState.copy(loginDetails = newLoginDetails)
+        }
+        .addOnCompleteListener {
+          isLoading = false
         }
     }
     Log.d("LoginViewModel", auth.currentUser.toString())

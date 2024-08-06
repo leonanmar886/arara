@@ -23,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AddBox
-import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -67,6 +66,7 @@ import coil.request.ImageRequest
 import com.example.arara.R
 import com.example.arara.models.Clothes
 import com.example.arara.ui.AppViewModelProvider
+import com.example.arara.ui.components.LoadingComponent
 import com.example.arara.ui.navigation.NavigationDestination
 
 object ClothesDestination: NavigationDestination {
@@ -103,103 +103,109 @@ fun ClothesListScreen(
     
     Log.d("ClothesListScreen", "Tags: ${clothesUiState.tags}")
     
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Logo(modifier = modifier)
-            IconButton(
-                onClick = {
-                    viewModel.logout()
-                    navigateToLogin()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
-                    contentDescription = "Sair da conta"
-                )
-            }
-        }
+    val isLoading by viewModel::isLoading
+    
+    if (isLoading) {
+        LoadingComponent()
+    } else {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = Color.White)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 25.dp, end = 25.dp)
             ) {
-                var text by remember { mutableStateOf("") }
-                SearchField(
-                    value = text,
-                    onValueChange = {
-                        text = it
-                        viewModel.filterClothes(it)
-                    },
-                    label = "Buscar por tags",
-                    errorMessage = "",
-                    aboutIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "Busque suas roupas",
-                        )
-                    },
-                    modifier = Modifier,
-                    options = clothesUiState.tags
-                )
-                Button(
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF00B8A9))
+                Logo(modifier = modifier)
+                IconButton(
+                    onClick = {
+                        viewModel.logout()
+                        navigateToLogin()
+                    }
                 ) {
-                    Text(
-                        text = "BUSCAR",
-                        fontSize = 12.sp
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
+                        contentDescription = "Sair da conta"
                     )
                 }
-                IconButton(
-                    onClick = { navigateToRegister() },
-                    modifier = Modifier.size(24.dp),
-                    content = {
-                        Icon(
-                            imageVector = Icons.Outlined.AddBox,
-                            contentDescription = "Criar Nova Roupa"
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 25.dp, end = 25.dp)
+                ) {
+                    var text by remember { mutableStateOf("") }
+                    SearchField(
+                        value = text,
+                        onValueChange = {
+                            text = it
+                            viewModel.filterClothes(it)
+                        },
+                        label = "Buscar por tags",
+                        errorMessage = "",
+                        aboutIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Search,
+                                contentDescription = "Busque suas roupas",
+                            )
+                        },
+                        modifier = Modifier,
+                        options = clothesUiState.tags
+                    )
+                    Button(
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF00B8A9))
+                    ) {
+                        Text(
+                            text = "BUSCAR",
+                            fontSize = 12.sp
                         )
                     }
-                )
-            }
-
-            Text(
-                text = "Todas as roupas",
-                color = Color.Black,
-                fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.quicksand)),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(start = 28.dp, top = 10.dp, end = 11.dp, bottom = 10.dp)
-            )
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp, 0.dp)
-                    .background(color = Color.White)
-            ) {
-                items(clothesList) { clothes ->
-                    ImageCard(clothes = clothes, modifier = modifier, viewModel = viewModel, navigateToDetails = navigateToDetails)
+                    IconButton(
+                        onClick = { navigateToRegister() },
+                        modifier = Modifier.size(24.dp),
+                        content = {
+                            Icon(
+                                imageVector = Icons.Outlined.AddBox,
+                                contentDescription = "Criar Nova Roupa"
+                            )
+                        }
+                    )
                 }
+    
+                Text(
+                    text = "Todas as roupas",
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.quicksand)),
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(start = 28.dp, top = 10.dp, end = 11.dp, bottom = 10.dp)
+                )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(16.dp, 0.dp)
+                        .background(color = Color.White)
+                ) {
+                    items(clothesList) { clothes ->
+                        ImageCard(clothes = clothes, modifier = modifier, navigateToDetails = navigateToDetails)
+                    }
+                }
+                Footer(modifier = Modifier)
             }
-            Footer(modifier = Modifier)
         }
     }
 }
@@ -236,7 +242,6 @@ fun ImageCard(
     clothes: Clothes,
     modifier: Modifier,
     navigateToDetails: (id: String) -> Unit,
-    viewModel: ClothesListViewModel
 ) {
     val context = LocalContext.current
     val imageLoader = remember(context) { ImageLoader(context) }
